@@ -16,7 +16,13 @@
     },
     { "type": "wokwi-relay-module", "id": "relay1", "top": -211, "left": -374.4, "attrs": {} },
     { "type": "wokwi-relay-module", "id": "relay2", "top": -143.8, "left": -345.6, "attrs": {} },
-    { "type": "wokwi-led", "id": "led1", "top": 34.8, "left": -169, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -80.4,
+      "left": -581.8,
+      "attrs": { "color": "red", "flip": "" }
+    },
     {
       "type": "wokwi-pushbutton",
       "id": "btn2",
@@ -51,6 +57,91 @@
       "top": 159.8,
       "left": 182.4,
       "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -118.8,
+      "left": -581.8,
+      "attrs": { "color": "blue" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led3",
+      "top": -157.2,
+      "left": -581.8,
+      "attrs": { "color": "blue" }
+    },
+    { "type": "wokwi-led", "id": "led4", "top": -42, "left": -581.8, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-text",
+      "id": "text1",
+      "top": -28.8,
+      "left": -652.8,
+      "attrs": { "text": "Lendo SD" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text2",
+      "top": -144,
+      "left": -777.6,
+      "attrs": { "text": "IRRIGACAO PROGRAMADA" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text3",
+      "top": -105.6,
+      "left": -758.4,
+      "attrs": { "text": "IRRIGACAO FORCADA" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text4",
+      "top": -67.2,
+      "left": -652.8,
+      "attrs": { "text": "TRAVADO" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -120.85,
+      "left": -556.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -82.45,
+      "left": -556.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": -44.05,
+      "left": -556.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r4",
+      "top": -5.65,
+      "left": -556.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text5",
+      "top": -86.4,
+      "left": -297.6,
+      "attrs": { "text": "BOMBA" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text6",
+      "top": -240,
+      "left": -336,
+      "attrs": { "text": "Solenoide" }
     }
   ],
   "connections": [
@@ -78,8 +169,6 @@
     [ "relay2:IN", "esp:26", "green", [ "h0", "v86.2" ] ],
     [ "rtc1:SDA", "esp:21", "green", [ "h-48", "v57.3" ] ],
     [ "rtc1:SCL", "esp:22", "green", [ "h-38.4", "v19" ] ],
-    [ "bb2:27t.a", "bb2:tn.22", "green", [ "v0" ] ],
-    [ "bb2:28t.d", "esp:33", "green", [ "v0" ] ],
     [ "bb2:tn.23", "btn2:2.l", "black", [ "v9.5", "h97.6", "v192", "h201.6", "v-9.6" ] ],
     [ "btn3:2.l", "bb2:tn.15", "black", [ "h-393.6", "v0.2" ] ],
     [ "btn1:2.l", "bb2:tn.13", "black", [ "h-412.8", "v0.2" ] ],
@@ -88,14 +177,30 @@
     [ "esp:32", "btn1:1.l", "green", [ "h-28.65", "v192", "h172.8" ] ],
     [ "esp:12", "btn5:1.l", "green", [ "v0", "h-19.05", "v115.2", "h172.8", "v-76.8" ] ],
     [ "btn5:2.l", "bb2:tn.21", "black", [ "h-9.6", "v29", "h-249.6" ] ],
-    [ "led1:A", "bb2:28t.c", "", [ "$bb" ] ],
-    [ "led1:C", "bb2:27t.c", "", [ "$bb" ] ],
     [ "esp:13", "btn4:1.l", "green", [ "h-9.45", "v57.6", "h230.4" ] ],
     [
       "esp:14",
       "btn2:1.l",
       "green",
       [ "h-9.45", "v28.8", "h-28.8", "v57.6", "h0", "v38.4", "h201.6", "v-124.8" ]
+    ],
+    [ "bb2:tn.1", "led4:C", "black", [ "v-0.1", "h-171.2" ] ],
+    [ "bb2:tn.1", "led1:C", "black", [ "v-0.1", "h-180.8", "v-67.2" ] ],
+    [ "bb2:tn.1", "led2:C", "black", [ "v-0.1", "h-180.8", "v-105.6" ] ],
+    [ "bb2:tn.1", "led3:C", "black", [ "v-0.1", "h-180.8", "v-144" ] ],
+    [ "esp:33", "r4:2", "gray", [ "h0" ] ],
+    [
+      "esp:4",
+      "r3:2",
+      "gray",
+      [ "h28.8", "v28.8", "h0", "v144", "h-422.4", "v0", "h-201.6", "v-355.2" ]
+    ],
+    [ "esp:15", "r2:2", "blue", [ "v0", "h38.4", "v153.6", "h-624", "v-345.6", "h0", "v-48" ] ],
+    [
+      "esp:2",
+      "r1:2",
+      "blue",
+      [ "h38.4", "v-48", "h192", "v278.4", "h-566.4", "v0", "h-240", "v-499.2" ]
     ]
   ],
   "dependencies": {}

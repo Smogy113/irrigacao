@@ -124,6 +124,7 @@ void gerenciarMenu() {
       strcpy(buffer,    novaData);
       strcpy(horaInicio, novaHora);
       //snprintf(duracaoStr, sizeof(duracaoStr), "%d", duracaoEmSegundos);
+      snprintf(duracaoStr, sizeof(duracaoStr), "%d", 5);
 
 
       if (horaRegaForcado != 0) {
@@ -145,7 +146,13 @@ void alternarBotao() {
   // ── Botão de trava ────────────────────────────────────────────────────────
   if (botaoTravar.foiClicado()) {
     estadoBotao = !estadoBotao;
-    if (estadoBotao) strcpy(bufferParado, dataHoje);
+    if (estadoBotao) {
+      digitalWrite(PIN_LED_TRAVADO,    HIGH);
+      strcpy(bufferParado, dataHoje);
+    }
+    if (estadoBotao) {
+      digitalWrite(PIN_LED_TRAVADO,    LOW);
+    }
     Serial.print("Trava: "); Serial.println(estadoBotao);
   }
 
@@ -169,15 +176,16 @@ void alternarBotao() {
           interfaceAtual = PROGRAMADA;
           estadoDeLeitura = !estadoDeLeitura;
           voltarParaProgramada = false;
-
+          regaForcadaAtiva = false;
           strcpy(buffer, "1990/01/01");
           strcpy(horaInicio, "25:00:00");
           strcpy(duracaoStr, "1");
           return;
         }
         if (menuSelecionado == 3) {
+          lcd.clear();
           voltarParaProgramada = false;
-          strcpy(ultimoBuffer, "1900/01/01");
+          strcpy(ultimoBuffer, "1910/01/01");
         }
       }
     }

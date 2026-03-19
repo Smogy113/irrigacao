@@ -1,10 +1,10 @@
 #include "config.h"
 
 const char LINHAS_PADRAO[] =
-  "2026/03/04,13:47:50,0005,13:50:50,0005,18:47:50,0005\n"
-  "2026/03/06,17:14:50,0005\n"
-  "2026/03/08,21:30:00,1501,22:00:00,1601\n"
-  "2026/03/12,13:42:20,0010,13:23:40,0010,23:36:20,0010\n"
+  "1026/03/04,13:47:50,0005,13:50:50,0005,18:47:50,0005\n"
+  "2026/003/06,17:14:50,0005\n"
+  "2026/13/08,21:30:00,1501,22:00:00,1601\n"
+  "2026/03/35,13:42:20,0010,13:23:40,0010,23:36:20,0010\n"
   "2026/03/17,13:42:20,0010,21:54:05,0010,23:36:20,0010\n";
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
@@ -19,19 +19,19 @@ LigadoDesligado estadoBomba         = DESLIGADO;
 DateTime agora;
 DateTime inicioDaRega;
 
-char horaInicio[9]        = "";
-char duracaoStr[20]       = "";
-char dataP[11]            = "";
-char buffer[11]           = "";
-char dataHoje[11]         = "";
-char bufferParado[11]     = "";
+char horaInicio[9]          = "";
+char duracaoStr[20]         = "";
+char dataP[11]              = "";
+char buffer[11]             = "";
+char dataHoje[11]           = "";
+char bufferParado[11]       = "";
 char ultimoBufferParado[11] = "";
-char ultimaData[11]       = "";
-char ultimoBuffer[11]     = "";
-char ultimaHora[9]        = "";
-char ultimaDuracao[20]    = "";
-char horaAgora[9]         = "";
-char resposta[9]          = "";
+char ultimaData[11]         = "";
+char ultimoBuffer[11]       = "";
+char ultimaHora[9]          = "";
+char ultimaDuracao[20]      = "";
+char horaAgora[9]           = "";
+char resposta[9]            = "";
 
 std::string conteudoDaLinha;
 

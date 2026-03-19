@@ -33,6 +33,7 @@ void gerenciarRega() {
   // Desativa travas se virou o dia
   if (strcmp(bufferParado, dataHoje) != 0 && estadoBotao) {
     estadoBotao = false;
+    digitalWrite(PIN_LED_TRAVADO,    LOW);
   }
 
   if (!estadoBotao && estadoAtual == OCIOSO) return;
@@ -60,9 +61,14 @@ void gerenciarRega() {
       if (agora_ms - tempoInicio >= duracaoRega || estadoBotao) {
         digitalWrite(PIN_BOMBA, LOW);
         Serial.println("BOMBA DESLIGADA");
-        registrarLogRegaConcluida();
         strcpy(ultimoBuffer, "1900/01/01");
-        atualizarProximaIrrigacaoForcada();
+        registrarLogRegaConcluida();
+        if (regaForcadaAtiva) {
+          atualizarProximaIrrigacaoForcada();
+        } else {
+          strcpy(buffer,   "1900/01/01");
+          strcpy(horaInicio, "25:00:00");
+        }
         tempoInicio = agora_ms;
         estadoBomba = DESLIGADO;
         estadoAtual = ESPERANDO_SOLENOIDE;

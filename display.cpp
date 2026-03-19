@@ -68,9 +68,11 @@ void formatarLcd() {
   ultimoEstadoBotao    = estadoBotao;
 
   // Data/hora anterior ao dia atual – sem irrigação programada
+  
   if ((cmpData < 0 && interfaceAtual == PROGRAMADA) ||
       (cmpData == 0 && estadoAtual == OCIOSO &&
-       strcmp(horaInicio, horaAgora) < 0 && interfaceAtual == PROGRAMADA)) {
+      strcmp(horaInicio, horaAgora) < 0 && interfaceAtual == PROGRAMADA) ||
+      (!regaForcadaAtiva && interfaceAtual == IRRIGACAO_FORCADA && strcmp(buffer, dataHoje) < 0)) {
     lcd.setCursor(0, 2);  lcd.print("----/--/--");
     lcd.setCursor(12, 2); lcd.print("--:--:--");
     lcd.setCursor(0, 3);  lcd.print("Em espera   --:--:--");
