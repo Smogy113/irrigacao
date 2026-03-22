@@ -77,55 +77,55 @@
       "type": "wokwi-text",
       "id": "text1",
       "top": -28.8,
-      "left": -652.8,
+      "left": -662.4,
       "attrs": { "text": "Lendo SD" }
     },
     {
       "type": "wokwi-text",
       "id": "text2",
       "top": -144,
-      "left": -777.6,
-      "attrs": { "text": "IRRIGACAO PROGRAMADA" }
+      "left": -672,
+      "attrs": { "text": "IRRIGANDO" }
     },
     {
       "type": "wokwi-text",
       "id": "text3",
       "top": -105.6,
-      "left": -758.4,
+      "left": -748.8,
       "attrs": { "text": "IRRIGACAO FORCADA" }
     },
     {
       "type": "wokwi-text",
       "id": "text4",
       "top": -67.2,
-      "left": -652.8,
+      "left": -662.4,
       "attrs": { "text": "TRAVADO" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r1",
       "top": -120.85,
-      "left": -556.8,
+      "left": -547.2,
       "attrs": { "value": "220" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r2",
       "top": -82.45,
-      "left": -556.8,
+      "left": -547.2,
       "attrs": { "value": "220" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r3",
       "top": -44.05,
-      "left": -556.8,
+      "left": -547.2,
       "attrs": { "value": "220" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r4",
-      "top": -5.65,
+      "top": 3.95,
       "left": -556.8,
       "attrs": { "value": "220" }
     },
@@ -142,6 +142,23 @@
       "top": -240,
       "left": -336,
       "attrs": { "text": "Solenoide" }
+    },
+    { "type": "wokwi-text", "id": "text7", "top": 278.4, "left": 220.8, "attrs": { "text": "^" } },
+    { "type": "wokwi-text", "id": "text8", "top": 326.4, "left": 220.8, "attrs": { "text": "v" } },
+    { "type": "wokwi-text", "id": "text9", "top": 336, "left": 268.8, "attrs": { "text": "OK" } },
+    {
+      "type": "wokwi-text",
+      "id": "text10",
+      "top": 172.8,
+      "left": 249.6,
+      "attrs": { "text": "Ler SD" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text11",
+      "top": 124.8,
+      "left": 249.6,
+      "attrs": { "text": "Pausar" }
     }
   ],
   "connections": [
@@ -201,7 +218,11 @@
       "r1:2",
       "blue",
       [ "h38.4", "v-48", "h192", "v278.4", "h-566.4", "v0", "h-240", "v-499.2" ]
-    ]
+    ],
+    [ "led1:A", "r3:1", "green", [ "v0" ] ],
+    [ "led4:A", "r4:1", "green", [ "v0" ] ],
+    [ "led2:A", "r2:1", "green", [ "v0", "h9.6" ] ],
+    [ "led3:A", "r1:1", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }

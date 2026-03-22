@@ -12,7 +12,7 @@ void setup() {
   pinMode(PIN_SOLENOIDE,      OUTPUT); digitalWrite(PIN_SOLENOIDE,      HIGH);
   pinMode(PIN_LED,            OUTPUT); digitalWrite(PIN_LED,            LOW);
   pinMode(PIN_LED_TRAVADO,    OUTPUT); digitalWrite(PIN_LED_TRAVADO,    LOW);
-  pinMode(PIN_LED_PROGRAMADA, OUTPUT); digitalWrite(PIN_LED_PROGRAMADA, LOW);
+  pinMode(PIN_LED_IRRIGANDO, OUTPUT); digitalWrite(PIN_LED_IRRIGANDO, LOW);
   pinMode(PIN_LED_FORCADA,    OUTPUT); digitalWrite(PIN_LED_FORCADA,    LOW);
 
   pinMode(PIN_BTN_TRAVAR, INPUT_PULLUP);
@@ -32,8 +32,11 @@ void setup() {
     while (1);
   }
   if (!rtc.isrunning()) {
-    rtc.adjust(DateTime(__DATE__, __TIME__));
+    //rtc.adjust(DateTime(__DATE__, __TIME__));
+    rtc.adjust(DateTime(2026, 3, 20, 23, 58, 50)); // (Ano, Mês, Dia, Hora, Minuto, Segundo)
+    //rtc.adjust(DateTime(__DATE__, "23:58:50"));
   }
+  rtc.adjust(DateTime(2026, 3, 21, 23, 58, 50)); // (Ano, Mês, Dia, Hora, Minuto, Segundo)
 
   if (!SD.begin(PIN_CHIP_SELECT)) {
     Serial.println("Falha no SD!");

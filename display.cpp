@@ -80,8 +80,8 @@ void formatarLcd() {
   }
 
   // Ocioso com próxima irrigação definida
-  if ((cmpData >= 0 && estadoAtual == OCIOSO && interfaceAtual == PROGRAMADA) ||
-      ((estadoAtual == OCIOSO || estadoAtual == ESPERANDO_SOLENOIDE) && interfaceAtual == IRRIGACAO_FORCADA)) {
+  if ((cmpData >= 0 && estadoAtual != REGANDO && interfaceAtual == PROGRAMADA) ||
+      (estadoAtual != REGANDO && interfaceAtual == IRRIGACAO_FORCADA)) {
     lcd.setCursor(0, 2);  lcd.print(buffer);
     lcd.setCursor(12, 2); lcd.print(horaInicio);
     lcd.setCursor(0, 3);

@@ -28,7 +28,7 @@ void executarRega(int segundos) {
 void gerenciarRega() {
   alternarBotao();   // leitura dos botões vem do módulo menu
 
-  if (interfaceAtual == MENU) return;
+  if (interfaceAtual == MENU && estadoAtual == OCIOSO) return;
 
   // Desativa travas se virou o dia
   if (strcmp(bufferParado, dataHoje) != 0 && estadoBotao) {
@@ -49,6 +49,7 @@ void gerenciarRega() {
       }
       if (agora_ms - tempoInicio >= ATRASO_SOLENOIDE) {
         Serial.println("BOMBA LIGADA");
+        digitalWrite(PIN_LED_IRRIGANDO, HIGH);
         digitalWrite(PIN_BOMBA, HIGH);
         estadoBomba  = LIGADO;
         tempoInicio  = agora_ms;
@@ -61,13 +62,17 @@ void gerenciarRega() {
       if (agora_ms - tempoInicio >= duracaoRega || estadoBotao) {
         digitalWrite(PIN_BOMBA, LOW);
         Serial.println("BOMBA DESLIGADA");
+        digitalWrite(PIN_LED_IRRIGANDO, LOW);
         strcpy(ultimoBuffer, "1900/01/01");
         registrarLogRegaConcluida();
-        if (regaForcadaAtiva) {
-          atualizarProximaIrrigacaoForcada();
-        } else {
-          strcpy(buffer,   "1900/01/01");
-          strcpy(horaInicio, "25:00:00");
+        
+        if (interfaceAtual == IRRIGACAO_FORCADA) {
+          if (regaForcadaAtiva) {
+            atualizarProximaIrrigacaoForcada();
+          } else {
+            strcpy(buffer,   "1900/01/01");
+            strcpy(horaInicio, "25:00:00");
+          }
         }
         tempoInicio = agora_ms;
         estadoBomba = DESLIGADO;

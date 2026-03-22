@@ -66,6 +66,7 @@ void gerenciarMenu() {
     // Voltar para a tela programada
     lcd.clear();
     interfaceAtual = PROGRAMADA;
+    digitalWrite(PIN_LED_FORCADA, LOW);
     strcpy(ultimoBuffer, "1900/01/01");
     estadoDeLeitura = !estadoDeLeitura;
     return;
@@ -107,6 +108,7 @@ void gerenciarMenu() {
       // Confirmar e ativar irrigação forçada
       interfaceAtual = IRRIGACAO_FORCADA;
       estadoAtual    = OCIOSO;
+      digitalWrite(PIN_LED_FORCADA, HIGH);
       lcd.clear();
 
       duracaoEmSegundos = duracaoRegaForcado * 60;
@@ -123,8 +125,8 @@ void gerenciarMenu() {
 
       strcpy(buffer,    novaData);
       strcpy(horaInicio, novaHora);
-      //snprintf(duracaoStr, sizeof(duracaoStr), "%d", duracaoEmSegundos);
-      snprintf(duracaoStr, sizeof(duracaoStr), "%d", 5);
+      snprintf(duracaoStr, sizeof(duracaoStr), "%d", duracaoEmSegundos);
+      //snprintf(duracaoStr, sizeof(duracaoStr), "%d", 5);
 
 
       if (horaRegaForcado != 0) {
@@ -150,7 +152,7 @@ void alternarBotao() {
       digitalWrite(PIN_LED_TRAVADO,    HIGH);
       strcpy(bufferParado, dataHoje);
     }
-    if (estadoBotao) {
+    if (!estadoBotao) {
       digitalWrite(PIN_LED_TRAVADO,    LOW);
     }
     Serial.print("Trava: "); Serial.println(estadoBotao);
@@ -174,6 +176,7 @@ void alternarBotao() {
         if (menuSelecionado == 2) {
           lcd.clear();
           interfaceAtual = PROGRAMADA;
+          digitalWrite(PIN_LED_FORCADA, LOW);
           estadoDeLeitura = !estadoDeLeitura;
           voltarParaProgramada = false;
           regaForcadaAtiva = false;
