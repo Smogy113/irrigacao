@@ -28,6 +28,15 @@ void executarRega(int segundos) {
 void gerenciarRega() {
   alternarBotao();   // leitura dos botões vem do módulo menu
 
+  // Fecha solenóide se ficou aberto preventivamente mas a rega não iniciou
+  if (estadoSolenoide == LIGADO && estadoAtual == OCIOSO) {
+    if (millis() - tempoAberturaPreventiva >= TIMEOUT_SOLENOIDE_PREVENTIVO) {
+        digitalWrite(PIN_SOLENOIDE, LOW);
+        estadoSolenoide = DESLIGADO;
+        Serial.println("SOLENOIDE FECHADO (timeout preventivo)");
+    }
+  }
+
   if (interfaceAtual == MENU && estadoAtual == OCIOSO) return;
 
   // Desativa travas se virou o dia

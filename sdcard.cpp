@@ -29,7 +29,8 @@ void lerArquivo() {
 
   while (f.available()) {
     conteudoDaLinha = f.readStringUntil('\n').c_str();
-
+    conteudoDaLinha.erase(remove(conteudoDaLinha.begin(), conteudoDaLinha.end(), '\r'), conteudoDaLinha.end());
+    
     String primeiroDado;
     if (!conteudoDaLinha.empty()) {
       size_t idx = conteudoDaLinha.find(',');

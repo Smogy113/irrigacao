@@ -6,7 +6,6 @@
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
 
   pinMode(PIN_BOMBA,          OUTPUT); digitalWrite(PIN_BOMBA,          HIGH);
   pinMode(PIN_SOLENOIDE,      OUTPUT); digitalWrite(PIN_SOLENOIDE,      HIGH);

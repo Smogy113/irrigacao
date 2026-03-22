@@ -25,7 +25,6 @@ DateTime inicioDaRega;
 
 char horaInicio[9]          = "";
 char duracaoStr[20]         = "";
-char dataP[11]              = "";
 char buffer[11]             = "";
 char dataHoje[11]           = "";
 char bufferParado[11]       = "";
@@ -52,6 +51,7 @@ unsigned long duracaoRega                   = 0;
 unsigned long ultimoTempoAgenda             = 0;
 unsigned long ultimoTempoFormatar           = 0;
 unsigned long tempoAnteriorAtualizarAgenda  = 0;
+unsigned long tempoAberturaPreventiva       = 0;
 
  
 int  menuSelecionado  = 0;

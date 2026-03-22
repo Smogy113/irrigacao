@@ -45,6 +45,7 @@ void verificarAgenda() {
         Serial.println("SOLENOIDE LIBERADO (pre-abertura)");
         digitalWrite(PIN_SOLENOIDE, HIGH);
         estadoSolenoide = LIGADO;
+        tempoAberturaPreventiva = millis();
       }
     }
   }

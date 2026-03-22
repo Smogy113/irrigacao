@@ -30,6 +30,7 @@ enum Interface    { PROGRAMADA, MENU, IRRIGACAO_FORCADA };
 const unsigned long ATRASO_SOLENOIDE        = 2000;
 const unsigned long INTERVALO_AGENDA        = 500;
 const unsigned long INTERVALO_ATUALIZAR_AGENDA = 500;
+const unsigned long TIMEOUT_SOLENOIDE_PREVENTIVO = 6000;
 
 // ─── Conteúdo padrão do SD ───────────────────────────────────────────────────
 extern const char LINHAS_PADRAO[];
@@ -49,7 +50,6 @@ extern LiquidCrystal_I2C lcd;
 // Buffers de tempo/data
 extern char horaInicio[9];
 extern char duracaoStr[20];
-extern char dataP[11];
 extern char buffer[11];
 extern char dataHoje[11];
 extern char bufferParado[11];
@@ -80,6 +80,7 @@ extern unsigned long ultimoTempoFormatar;
 extern unsigned long tempoAnteriorAtualizarAgenda;
 extern unsigned long tempoAnteriorVoltarProgramada;
 extern unsigned long tempoVoltarProgramada;
+extern unsigned long tempoAberturaPreventiva;
 
 // Menu / rega forçada
 extern int  menuSelecionado;
