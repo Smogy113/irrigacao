@@ -4,7 +4,7 @@
   "editor": "wokwi",
   "parts": [
     { "type": "wokwi-breadboard-half", "id": "bb2", "top": 6.6, "left": -429.2, "attrs": {} },
-    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": -9.6, "left": 4.84, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": -19.2, "left": 4.84, "attrs": {} },
     { "type": "wokwi-microsd-card", "id": "sd1", "top": 221.03, "left": -182.33, "attrs": {} },
     { "type": "wokwi-ds1307", "id": "rtc1", "top": -24.6, "left": 182.5, "attrs": {} },
     {
@@ -204,7 +204,6 @@
     [ "bb2:tn.1", "led4:C", "black", [ "v-0.1", "h-171.2" ] ],
     [ "bb2:tn.1", "led1:C", "black", [ "v-0.1", "h-180.8", "v-67.2" ] ],
     [ "bb2:tn.1", "led2:C", "black", [ "v-0.1", "h-180.8", "v-105.6" ] ],
-    [ "bb2:tn.1", "led3:C", "black", [ "v-0.1", "h-180.8", "v-144" ] ],
     [ "esp:33", "r4:2", "gray", [ "h0" ] ],
     [
       "esp:4",
@@ -213,16 +212,12 @@
       [ "h28.8", "v28.8", "h0", "v144", "h-422.4", "v0", "h-201.6", "v-355.2" ]
     ],
     [ "esp:15", "r2:2", "blue", [ "v0", "h38.4", "v153.6", "h-624", "v-345.6", "h0", "v-48" ] ],
-    [
-      "esp:2",
-      "r1:2",
-      "blue",
-      [ "h38.4", "v-48", "h192", "v278.4", "h-566.4", "v0", "h-240", "v-499.2" ]
-    ],
     [ "led1:A", "r3:1", "green", [ "v0" ] ],
     [ "led4:A", "r4:1", "green", [ "v0" ] ],
     [ "led2:A", "r2:1", "green", [ "v0", "h9.6" ] ],
-    [ "led3:A", "r1:1", "green", [ "v0" ] ]
+    [ "led3:A", "r1:1", "green", [ "v0" ] ],
+    [ "esp:16", "r1:2", "blue", [ "h57.6", "v-9.6", "h163.2", "v288", "h-796.8", "v-508.8" ] ],
+    [ "bb2:tn.1", "led3:C", "green", [ "v-0.1", "h-180.8", "v-144" ] ]
   ],
   "dependencies": {}
 }

@@ -12,7 +12,7 @@ const char LINHAS_PADRAO[] =
   "2026/03/22,13:42:20,0010,21:54:05,0010,23:36:20,0010\n";
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-RTC_DS1307        rtc;
+RTC_DS3231        rtc;
 
 Interface      interfaceAtual       = PROGRAMADA;
 Interface      ultimaInterfaceAtual = PROGRAMADA;

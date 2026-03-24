@@ -12,7 +12,7 @@ const int PIN_SOLENOIDE   = 25;
 const int PIN_CHIP_SELECT = 5;
 const int PIN_LED         = 33;
 const int PIN_LED_TRAVADO = 4;
-const int PIN_LED_IRRIGANDO = 2;
+const int PIN_LED_IRRIGANDO = 16;
 const int PIN_LED_FORCADA = 15;
 
 const int PIN_BTN_TRAVAR  = 14;
@@ -44,7 +44,7 @@ extern LigadoDesligado estadoBomba;
 
 extern DateTime agora;
 extern DateTime inicioDaRega;
-extern RTC_DS1307 rtc;
+extern RTC_DS3231 rtc;
 extern LiquidCrystal_I2C lcd;
 
 // Buffers de tempo/data
