@@ -7,12 +7,12 @@
 #include <string>
 
 // ─── Pinos ────────────────────────────────────────────────────────────────────
-const int PIN_BOMBA       = 26;
-const int PIN_SOLENOIDE   = 25;
+const int PIN_BOMBA       = 25;
+const int PIN_SOLENOIDE   = 26;
 const int PIN_CHIP_SELECT = 5;
 const int PIN_LED         = 33;
 const int PIN_LED_TRAVADO = 4;
-const int PIN_LED_IRRIGANDO = 16;
+const int PIN_LED_IRRIGANDO = 17;
 const int PIN_LED_FORCADA = 15;
 
 const int PIN_BTN_TRAVAR  = 14;

@@ -7,7 +7,7 @@
 void setup() {
   Serial.begin(115200);
 
-  pinMode(PIN_BOMBA,         OUTPUT); digitalWrite(PIN_BOMBA,         LOW);
+  pinMode(PIN_BOMBA,         OUTPUT); digitalWrite(PIN_BOMBA,         HIGH);
   pinMode(PIN_SOLENOIDE,     OUTPUT); digitalWrite(PIN_SOLENOIDE,     HIGH);
   pinMode(PIN_LED,           OUTPUT); digitalWrite(PIN_LED,           LOW);
   pinMode(PIN_LED_TRAVADO,   OUTPUT); digitalWrite(PIN_LED_TRAVADO,   LOW);

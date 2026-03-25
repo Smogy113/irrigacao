@@ -10,13 +10,13 @@ void executarRega(int segundos) {
 
   if (estadoSolenoide == DESLIGADO) {
     Serial.println("SOLENOIDE LIBERADO");
-    digitalWrite(PIN_SOLENOIDE, HIGH);
+    digitalWrite(PIN_SOLENOIDE, LOW);
     estadoSolenoide = LIGADO;
     estadoAtual     = ABRINDO_SOLENOIDE;
     tempoInicio     = millis();
   } else {
     Serial.println("BOMBA LIGADA");
-    digitalWrite(PIN_BOMBA, HIGH);
+    digitalWrite(PIN_BOMBA, LOW);
     estadoBomba  = LIGADO;
     tempoInicio  = millis();
     inicioDaRega = rtc.now();
@@ -31,7 +31,7 @@ void gerenciarRega() {
   // Fecha solenóide se ficou aberto preventivamente mas a rega não iniciou
   if (estadoSolenoide == LIGADO && estadoAtual == OCIOSO) {
     if (millis() - tempoAberturaPreventiva >= TIMEOUT_SOLENOIDE_PREVENTIVO) {
-        digitalWrite(PIN_SOLENOIDE, LOW);
+        digitalWrite(PIN_SOLENOIDE, HIGH);
         estadoSolenoide = DESLIGADO;
         Serial.println("SOLENOIDE FECHADO (timeout preventivo)");
     }
@@ -59,7 +59,7 @@ void gerenciarRega() {
       if (agora_ms - tempoInicio >= ATRASO_SOLENOIDE) {
         Serial.println("BOMBA LIGADA");
         digitalWrite(PIN_LED_IRRIGANDO, HIGH);
-        digitalWrite(PIN_BOMBA, HIGH);
+        digitalWrite(PIN_BOMBA, LOW);
         estadoBomba  = LIGADO;
         tempoInicio  = agora_ms;
         inicioDaRega = rtc.now();
@@ -69,7 +69,7 @@ void gerenciarRega() {
 
     case REGANDO:
       if (agora_ms - tempoInicio >= duracaoRega || estadoBotao) {
-        digitalWrite(PIN_BOMBA, LOW);
+        digitalWrite(PIN_BOMBA, HIGH);
         Serial.println("BOMBA DESLIGADA");
         digitalWrite(PIN_LED_IRRIGANDO, LOW);
         strcpy(ultimoBuffer, "1900/01/01");
@@ -92,7 +92,7 @@ void gerenciarRega() {
     case ESPERANDO_SOLENOIDE:
       if (agora_ms - tempoInicio >= ATRASO_SOLENOIDE) {
         if (estadoBomba == DESLIGADO) {
-          digitalWrite(PIN_SOLENOIDE, LOW);
+          digitalWrite(PIN_SOLENOIDE, HIGH);
           Serial.println("SOLENOIDE FECHADO");
           estadoSolenoide = DESLIGADO;
         }
