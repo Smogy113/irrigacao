@@ -45,6 +45,7 @@ bool estadoDeLeitura        = false;
 bool duracaoJaSelecionada   = false;
 bool regaForcadaAtiva       = false;
 bool voltarParaProgramada   = false;
+bool flagPararIrrigacao     = false;
 
 unsigned long tempoInicio                   = 0;
 unsigned long duracaoRega                   = 0;

@@ -31,13 +31,14 @@ void setup() {
     while (1);
   }
   Serial.println("RTC iniciado");
-  if (!rtc.lostPower()) {
+  
+  
+  if (rtc.lostPower()) {
     rtc.adjust(DateTime(__DATE__, __TIME__));
     //rtc.adjust(DateTime(2026, 3, 20, 23, 58, 50)); // (Ano, Mês, Dia, Hora, Minuto, Segundo)
     //rtc.adjust(DateTime(__DATE__, "23:58:50"));
   }
-  rtc.adjust(DateTime(__DATE__, __TIME__));
-
+  
   if (!SD.begin(PIN_CHIP_SELECT)) {
     Serial.println("Falha no SD!");
   }

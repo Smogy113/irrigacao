@@ -183,6 +183,7 @@ void alternarBotao() {
           strcpy(buffer, "1990/01/01");
           strcpy(horaInicio, "25:00:00");
           strcpy(duracaoStr, "1");
+          flagPararIrrigacao = true;
           return;
         }
         if (menuSelecionado == 3) {

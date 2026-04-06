@@ -21,7 +21,7 @@ void verificarAgenda() {
   if (estadoBotao && interfaceAtual == PROGRAMADA) {
     proximaIrrigacao();
     return;
-  }
+  } 
   if (horaInicio[0] != '\0' && strcmp(horaInicio, horaAgora) <= 0) {
     int tempoRega = atoi(duracaoStr);
     if (tempoRega > 0 && estadoAtual == OCIOSO) {

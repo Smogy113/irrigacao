@@ -16,6 +16,7 @@ void executarRega(int segundos) {
     tempoInicio     = millis();
   } else {
     Serial.println("BOMBA LIGADA");
+    digitalWrite(PIN_LED_IRRIGANDO, HIGH);
     digitalWrite(PIN_BOMBA, LOW);
     estadoBomba  = LIGADO;
     tempoInicio  = millis();
@@ -49,6 +50,18 @@ void gerenciarRega() {
 
   unsigned long agora_ms = millis();
 
+  if (flagPararIrrigacao == true) {
+    flagPararIrrigacao = false;
+    digitalWrite(PIN_BOMBA, HIGH);
+    Serial.println("BOMBA DESLIGADA");
+    digitalWrite(PIN_LED_IRRIGANDO, LOW);
+    strcpy(ultimoBuffer, "1900/01/01");
+    registrarLogRegaConcluida();
+    tempoInicio = agora_ms;
+    estadoBomba = DESLIGADO;
+    estadoAtual = ESPERANDO_SOLENOIDE;
+  }
+  
   switch (estadoAtual) {
     case ABRINDO_SOLENOIDE:
       if (estadoBotao) {

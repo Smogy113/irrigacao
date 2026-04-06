@@ -14,11 +14,11 @@ void lerArquivo() {
   }
 
   // Cria arquivo com conteúdo padrão se não existir
-  if (!SD.exists("/data.txt")) {
-    File f = SD.open("/data.txt", FILE_WRITE);
-    if (f) { f.print(LINHAS_PADRAO); f.close(); }
-    else   { Serial.println("Erro ao criar data.txt"); }
-  }
+  // if (!SD.exists("/data.txt")) {
+  //   File f = SD.open("/data.txt", FILE_WRITE);
+  //   if (f) { f.print(LINHAS_PADRAO); f.close(); }
+  //   else   { Serial.println("Erro ao criar data.txt"); }
+  // }
 
   File f = SD.open("/data.txt");
   if (!f) { Serial.println("Erro ao abrir data.txt"); return; }
