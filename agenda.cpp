@@ -43,7 +43,7 @@ void verificarAgenda() {
 
       if (diffSeg >= 0 && diffSeg <= 2 && estadoSolenoide == DESLIGADO) {
         Serial.println("SOLENOIDE LIBERADO (pre-abertura)");
-        digitalWrite(PIN_SOLENOIDE, LOW);
+        digitalWrite(PIN_SOLENOIDE, HIGH);
         estadoSolenoide = LIGADO;
         tempoAberturaPreventiva = millis();
       }

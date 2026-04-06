@@ -58,7 +58,7 @@ void gerenciarMenu() {
   if (interfaceAtual != MENU) return;
 
   desenharCursor();
-
+ 
   if (!botaoMenu.foiClicado()) return;
 
   // ── Processar seleção ─────────────────────────────────────────────────────
