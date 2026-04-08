@@ -1,6 +1,26 @@
 #include "sdcard.h"
 #include "config.h"
 
+// Tenta (re)inicializar o SD se necessário
+static bool garantirSD() {
+  // Testa se o SD já está ok abrindo a raiz
+  File root = SD.open("/");
+  if (root) {
+    root.close();
+    return true;
+  }
+  // SD em estado ruim: reinicializa
+  Serial.println("SD não montado, tentando reinicializar...");
+  SD.end();
+  //delay(200);
+  if (!SD.begin(PIN_CHIP_SELECT)) {
+    Serial.println("Falha ao reinicializar SD");
+    return false;
+  }
+  Serial.println("SD reinicializado com sucesso");
+  return true;
+}
+
 void lerArquivo() {
   if (interfaceAtual != PROGRAMADA) return;
 
@@ -20,10 +40,11 @@ void lerArquivo() {
   //   else   { Serial.println("Erro ao criar data.txt"); }
   // }
 
-  File f = SD.open("/data.txt");
-  if (!f) { Serial.println("Erro ao abrir data.txt"); return; }
-
   digitalWrite(PIN_LED, HIGH);
+  if (!garantirSD()) { digitalWrite(PIN_LED, LOW); return; }  // <-- adiciona
+  File f = SD.open("/data.txt");
+  if (!f) { Serial.println("Erro ao abrir data.txt"); digitalWrite(PIN_LED, LOW); return; }
+
 
   bool pulou = false;
 
@@ -67,6 +88,11 @@ void lerArquivo() {
 void registrarLogRegaConcluida() {
   DateTime fimDaRega  = rtc.now();
   TimeSpan duracaoReal = fimDaRega - inicioDaRega;
+
+  if (!garantirSD()) {
+    Serial.println("ERRO: SD não disponível");
+    return;
+ }
 
   File logFile = SD.open("/logdata.txt", FILE_WRITE);
   if (!logFile) {
