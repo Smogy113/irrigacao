@@ -17,7 +17,7 @@ static bool garantirSD() {
     Serial.println("Falha ao reinicializar SD");
     return false;
   }
-  Serial.println("SD reinicializado com sucesso");
+  Serial.println("SD rei nicializado com sucesso");
   return true;
 }
 
@@ -41,7 +41,7 @@ void lerArquivo() {
   // }
 
   digitalWrite(PIN_LED, HIGH);
-  if (!garantirSD()) { digitalWrite(PIN_LED, LOW); return; }  // <-- adiciona
+  if (!garantirSD()) { digitalWrite(PIN_LED, LOW); return; }
   File f = SD.open("/data.txt");
   if (!f) { Serial.println("Erro ao abrir data.txt"); digitalWrite(PIN_LED, LOW); return; }
 
@@ -49,6 +49,7 @@ void lerArquivo() {
   bool pulou = false;
 
   while (f.available()) {
+    Serial.println("a");
     conteudoDaLinha = f.readStringUntil('\n').c_str();
     conteudoDaLinha.erase(remove(conteudoDaLinha.begin(), conteudoDaLinha.end(), '\r'), conteudoDaLinha.end());
     
