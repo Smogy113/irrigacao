@@ -173,7 +173,6 @@ void loop(){
 
 
   unsigned long tempoAtual = millis();
-
-
+  
 }
 
