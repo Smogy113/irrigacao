@@ -30,7 +30,8 @@ dataReceived receivedPacked;
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&receivedPacked, incomingData, sizeof(receivedPacked));
     Serial.print("Bytes recebidos: ");
-    Serial.println(len);
+    Serial.println(len);    
+    Serial.println("Número da mensagem: " + String(receivedPacked.messageNum));
 }
 
 void setup() {

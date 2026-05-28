@@ -3,6 +3,8 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 #include <esp_now.h>
+#include "defSensors.h"
+#include "checkPins.h"
 
 
 void readMacAddress() {
@@ -102,6 +104,7 @@ void setup() {
   // Zera a memória do pacote ao ligar o ESP32
   memset(&sendPacked, 0, sizeof(dataPacket));
 
+
   // Preenchimento de teste
   sendPacked.espId = 1;
   sendPacked.messageType = 1;
@@ -118,6 +121,7 @@ void setup() {
   sendPacked.ids2Data = 8;
   
   sendPacked.gabarito = 0b0000000000000000; // Gabarito de teste (2 Bytes)
+
 
   uint8_t *buffer_bytes = (uint8_t*)&sendPacked;
 
@@ -153,6 +157,8 @@ void setup() {
 }
 
 void loop() {
+
+  defAndCheckPins();
   
   //Definindo o pacote de dados a ser enviado (preenchido com valores de teste)
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *)&sendPacked, sizeof(sendPacked)); // Envia o pacote de dados para o endereço de broadcast
@@ -162,6 +168,8 @@ void loop() {
   } else {
     Serial.println("Erro ao enviar pacote de dados");
   }
+
+  sendPacked.messageNum += 1;
 
   delay(2000);
 
