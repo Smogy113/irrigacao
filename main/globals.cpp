@@ -36,7 +36,7 @@ char ultimaDuracao[20]      = "";
 char horaAgora[9]           = "";
 char resposta[9]            = "";
 
-std::string conteudoDaLinha;
+char conteudoDaLinha[512] = "";
 
 bool indicadorDiaTerminado  = false;
 bool estadoBotao            = false;

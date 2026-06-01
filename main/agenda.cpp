@@ -55,36 +55,51 @@ void verificarAgenda() {
 
 void proximaIrrigacao() {
   if (interfaceAtual != PROGRAMADA) return;
-  if (strcmp(buffer, dataHoje) < 0)  return;
+  if (strcmp(buffer, dataHoje) < 0) return;
 
-  size_t pos = conteudoDaLinha.find(',');
-  if (pos == std::string::npos) return;
-  pos++;
+  // Encontra a primeira vírgula (que separa a data das horas)
+  char* pos = strchr(conteudoDaLinha, ',');
+  if (pos == NULL) return;
+  pos++; // Avança a posição para logo após a vírgula
 
-  size_t posVirgulaDuracao;
+  char* posVirgulaDuracao;
   do {
-    size_t posVirgulaHora  = conteudoDaLinha.find(',', pos);
-    size_t tamanhoHora     = posVirgulaHora - pos;
-    strncpy(horaInicio, conteudoDaLinha.c_str() + pos, tamanhoHora);
+    // Procura a vírgula depois da Hora
+    char* posVirgulaHora = strchr(pos, ',');
+    if (posVirgulaHora == NULL) break; 
+
+    // Copia a Hora (limitando ao tamanho do vetor de destino)
+    size_t tamanhoHora = posVirgulaHora - pos;
+    if (tamanhoHora >= sizeof(horaInicio)) tamanhoHora = sizeof(horaInicio) - 1;
+    strncpy(horaInicio, pos, tamanhoHora);
     horaInicio[tamanhoHora] = '\0';
 
+    // Pula a vírgula para ler a duração
     pos = posVirgulaHora + 1;
-    posVirgulaDuracao = conteudoDaLinha.find(',', pos);
+    posVirgulaDuracao = strchr(pos, ',');
 
-    const size_t TAM_DUR = 4;
-    strncpy(duracaoStr, conteudoDaLinha.c_str() + pos, TAM_DUR);
-    duracaoStr[TAM_DUR] = '\0';
+    // Copia a Duração (se não houver próxima vírgula, vai até o fim da linha)
+    size_t tamanhoDuracao;
+    if (posVirgulaDuracao != NULL) {
+      tamanhoDuracao = posVirgulaDuracao - pos;
+    } else {
+      tamanhoDuracao = strlen(pos);
+    }
+    if (tamanhoDuracao >= sizeof(duracaoStr)) tamanhoDuracao = sizeof(duracaoStr) - 1;
+    
+    strncpy(duracaoStr, pos, tamanhoDuracao);
+    duracaoStr[tamanhoDuracao] = '\0';
 
-    if (posVirgulaDuracao != std::string::npos) {
+    // Avança para a próxima rodada, caso exista mais irrigações na linha
+    if (posVirgulaDuracao != NULL) {
       pos = posVirgulaDuracao + 1;
     }
 
     if (strcmp(buffer, dataHoje) > 0) break;
 
-  } while (posVirgulaDuracao != std::string::npos &&
-           strcmp(horaInicio, horaAgora) < 0);
+  } while (posVirgulaDuracao != NULL && strcmp(horaInicio, horaAgora) < 0);
 
-  // Dia encerrado – sem mais horários
+  // Dia encerrado – sem mais horários programados válidos para hoje
   if (horaInicio[0] == '\0' || strcmp(horaInicio, horaAgora) < 0) {
     indicadorDiaTerminado = true;
   }

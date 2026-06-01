@@ -46,19 +46,31 @@ void lerArquivo() {
 
   bool pulou = false;
 
-  // Varredura do arquivo
+  // Varredura do arquivo usando C-strings (zero alocação dinâmica)
   while (f.available()) {
-    conteudoDaLinha = f.readStringUntil('\n').c_str();
-    conteudoDaLinha.erase(remove(conteudoDaLinha.begin(), conteudoDaLinha.end(), '\r'), conteudoDaLinha.end());
-    
-    String primeiroDado;
-    if (!conteudoDaLinha.empty()) {
-      size_t idx = conteudoDaLinha.find(',');
-      primeiroDado = conteudoDaLinha.substr(0, idx).c_str();
-    }
+    // Lê os dados do arquivo diretamente para o vetor estático
+    size_t bytesLidos = f.readBytesUntil('\n', conteudoDaLinha, sizeof(conteudoDaLinha) - 1);
+    conteudoDaLinha[bytesLidos] = '\0'; // Finaliza a string com caractere nulo
 
-    strncpy(buffer, primeiroDado.c_str(), sizeof(buffer) - 1);
-    buffer[sizeof(buffer) - 1] = '\0';
+    // Remove o '\r' (retorno de carro) caso exista
+    char* cr = strchr(conteudoDaLinha, '\r');
+    if (cr) *cr = '\0';
+    
+    // Ignora linhas vazias
+    if (bytesLidos == 0 || conteudoDaLinha[0] == '\0') continue;
+
+    // Busca o primeiro dado (Data) até a primeira vírgula
+    char* primeiraVirgula = strchr(conteudoDaLinha, ',');
+    if (primeiraVirgula) {
+      size_t tamDado = primeiraVirgula - conteudoDaLinha;
+      if (tamDado >= sizeof(buffer)) tamDado = sizeof(buffer) - 1;
+      strncpy(buffer, conteudoDaLinha, tamDado);
+      buffer[tamDado] = '\0';
+    } else {
+      // Se não houver vírgula, a linha inteira é a data
+      strncpy(buffer, conteudoDaLinha, sizeof(buffer) - 1);
+      buffer[sizeof(buffer) - 1] = '\0';
+    }
 
     if (strcmp(buffer, dataHoje) == 0 && indicadorDiaTerminado) {
       indicadorDiaTerminado = false;
@@ -72,14 +84,14 @@ void lerArquivo() {
   // 3. Tratamento blindado de Fim de Arquivo (EOF)
   if (!f.available() && strcmp(buffer, dataHoje) < 0) {
     // Arquivo inteiro lido e só tem datas antigas
-    conteudoDaLinha = "";
+    conteudoDaLinha[0] = '\0';
     buffer[0]     = '\0';
     horaInicio[0] = '\0';
     duracaoStr[0] = '\0';
     Serial.println("[SD] Sem novas irrigacoes para o futuro. Leitura bloqueada.");
   } else if (pulou && strcmp(buffer, dataHoje) <= 0) {
     // Pulou as de hoje e não achou mais nada
-    conteudoDaLinha = "";
+    conteudoDaLinha[0] = '\0';
     buffer[0]     = '\0';
     horaInicio[0] = '\0';
     duracaoStr[0] = '\0';

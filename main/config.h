@@ -4,7 +4,6 @@
 #include <RTClib.h>
 #include <SD.h>
 #include <LiquidCrystal_I2C.h>
-#include <string>
 
 // ─── Pinos ────────────────────────────────────────────────────────────────────
 const int PIN_BOMBA       = 25;
@@ -62,7 +61,7 @@ extern char ultimaDuracao[20];
 extern char horaAgora[9];
 extern char resposta[9];
 
-extern std::string conteudoDaLinha;
+extern char conteudoDaLinha[512];
 
 // Flags
 extern bool indicadorDiaTerminado;
