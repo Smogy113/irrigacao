@@ -91,3 +91,7 @@ extern unsigned int duracaoRegaForcado;
 extern unsigned int horaRegaForcado;
 extern uint32_t ultimoTempoRegaForcada;
 extern uint32_t intervaloEmSegundos;
+
+// ─── Funções de Memória (NVS) ────────────────────────────────────────────────
+void carregarConfiguracoesForcidas();
+void salvarConfiguracoesForcidas();

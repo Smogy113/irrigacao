@@ -58,7 +58,7 @@ void gerenciarMenu() {
   if (interfaceAtual != MENU) return;
 
   desenharCursor();
- 
+  
   if (!botaoMenu.foiClicado()) return;
 
   // ── Processar seleção ─────────────────────────────────────────────────────
@@ -86,8 +86,16 @@ void gerenciarMenu() {
   }
 
   if (!duracaoJaSelecionada) {
-    if (menuSelecionado == 1) { duracaoRegaForcado += 15; exibirDuracaoPrincipal(); }
-    if (menuSelecionado == 3 && duracaoRegaForcado > 15) { duracaoRegaForcado -= 15; exibirDuracaoPrincipal(); }
+    if (menuSelecionado == 1) { 
+      duracaoRegaForcado += 15; 
+      exibirDuracaoPrincipal(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
+    if (menuSelecionado == 3 && duracaoRegaForcado > 15) { 
+      duracaoRegaForcado -= 15; 
+      exibirDuracaoPrincipal(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
 
     if (menuSelecionado == 2) {
       // Avançar para ajuste de intervalo
@@ -101,8 +109,16 @@ void gerenciarMenu() {
     }
   } else {
     // Fase 2 – ajuste de intervalo
-    if (menuSelecionado == 1) { horaRegaForcado += 1; exibirIntervalo(); }
-    if (menuSelecionado == 3 && horaRegaForcado > 0) { horaRegaForcado -= 1; exibirIntervalo(); }
+    if (menuSelecionado == 1) { 
+      horaRegaForcado += 1; 
+      exibirIntervalo(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
+    if (menuSelecionado == 3 && horaRegaForcado > 0) { 
+      horaRegaForcado -= 1; 
+      exibirIntervalo(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
 
     if (menuSelecionado == 2) {
       // Confirmar e ativar irrigação forçada
@@ -127,7 +143,6 @@ void gerenciarMenu() {
       strcpy(horaInicio, novaHora);
       snprintf(duracaoStr, sizeof(duracaoStr), "%d", duracaoEmSegundos);
       //snprintf(duracaoStr, sizeof(duracaoStr), "%d", 5);
-
 
       if (horaRegaForcado != 0) {
         agora = rtc.now();

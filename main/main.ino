@@ -12,8 +12,15 @@
 void setup() {
   Serial.begin(115200);
 
+  carregarConfiguracoesForcidas();
+
   // Inicializa o WDT com o timeout definido e habilita o panic (reboot automático)
-  esp_task_wdt_init(WDT_TIMEOUT, true); 
+  esp_task_wdt_config_t wdt_config = {
+    .timeout_ms = WDT_TIMEOUT * 1000, // A versão nova exige o tempo em milissegundos
+    .idle_core_mask = (1 << portNUM_PROCESSORS) - 1, // Monitora os núcleos ativos
+    .trigger_panic = true             // Habilita o reboot automático (panic)
+  };
+  esp_task_wdt_init(&wdt_config); 
   esp_task_wdt_add(NULL); // Adiciona a thread atual (loop principal) ao WDT
 
   pinMode(PIN_BOMBA,         OUTPUT); digitalWrite(PIN_BOMBA,         LOW);

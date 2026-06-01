@@ -3,6 +3,8 @@
 #include "sdcard.h"
 #include "menu.h"
 
+static unsigned long ultimoSalvamento = 0;
+
 void executarRega(int segundos) {
   if (estadoAtual != OCIOSO) return;
 
@@ -83,7 +85,6 @@ void gerenciarRega() {
       break;
 
     case REGANDO:
-    static unsigned long ultimoSalvamento = 0;
     if (agora_ms - ultimoSalvamento >= 10000) {
       ultimoSalvamento = agora_ms;
       salvarRegaAtiva();
