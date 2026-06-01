@@ -1,4 +1,7 @@
 [wokwi]
 version = 1
+
+diagram = 'diagram.json'
 firmware = 'build\esp32.esp32.esp32\main.ino.elf'
 elf =  'build\esp32.esp32.esp32\main.ino.elf'
+
