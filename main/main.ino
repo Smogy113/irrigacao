@@ -4,10 +4,17 @@
 #include "rega.h"
 #include "menu.h"
 #include "sdcard.h"
+#include <esp_task_wdt.h>
 
+// Tempo em segundos para o WDT estourar e reiniciar o ESP32
+#define WDT_TIMEOUT 15
 
 void setup() {
   Serial.begin(115200);
+
+  // Inicializa o WDT com o timeout definido e habilita o panic (reboot automático)
+  esp_task_wdt_init(WDT_TIMEOUT, true); 
+  esp_task_wdt_add(NULL); // Adiciona a thread atual (loop principal) ao WDT
 
   pinMode(PIN_BOMBA,         OUTPUT); digitalWrite(PIN_BOMBA,         LOW);
   pinMode(PIN_SOLENOIDE,     OUTPUT); digitalWrite(PIN_SOLENOIDE,     LOW);
@@ -29,8 +36,8 @@ void setup() {
   lcd.print("INICIANDO...");
 
   if (!rtc.begin()) {
-    Serial.println("Erro ao iniciar o RTC");
-    while (1);
+    Serial.println("Erro: RTC nao encontrado! Reiniciando em instantes...");
+    delay(WDT_TIMEOUT * 1000 + 1000); // Espera o WDT resetar a placa
   }
   Serial.println("RTC iniciado");
   
@@ -55,6 +62,9 @@ void setup() {
 }
 
 void loop() {
+  // Alimenta o cão de guarda no início ou fim do loop
+  esp_task_wdt_reset();
+
   formatarLcd();
   atualizarAgenda();
   gerenciarRega();
