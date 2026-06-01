@@ -32,7 +32,10 @@ void atualizarAgenda() {
   if (interfaceAtual == MENU || voltarParaProgramada) return;
 
   lcd.setCursor(0, 0);  lcd.print(dataHoje);
-  lcd.setCursor(12, 0); lcd.print(horaAgora);
+
+  // ALTERAÇÃO LCD GRABRIEL
+  //lcd.setCursor(12, 0); lcd.print(horaAgora);
+  lcd.setCursor(10, 0); lcd.print(horaAgora); 
 }
 
 // Renderiza linhas 1-3 do LCD (próxima irrigação / status da rega)
@@ -47,8 +50,9 @@ void formatarLcd() {
 
   int cmpData = strcmp(buffer, dataHoje);
 
-  lcd.setCursor(0, 1);
-  lcd.print("-Proxima  irrigacao-");
+  // ALTERAÇÃO LCD GRABRIEL
+  //lcd.setCursor(0, 1);
+  //lcd.print("-Proxima  irrigacao-");
 
   // Evita redesenho desnecessário
   if (strcmp(ultimaData,        dataHoje)         == 0 &&
@@ -97,16 +101,21 @@ void formatarLcd() {
 
   // Regando – modo programado
   if (estadoAtual == REGANDO && interfaceAtual == PROGRAMADA) {
-    lcd.setCursor(0, 3);
+    // ALTERAÇÃO LCD GRABRIEL
+    //lcd.setCursor(0, 3);
+    lcd.setCursor(0, 2);
     lcd.print("Regando     ");
     return;
   }
 
   // Regando – modo forçado
   if (estadoAtual == REGANDO && interfaceAtual == IRRIGACAO_FORCADA) {
-    lcd.setCursor(0, 2);  lcd.print(buffer);
-    lcd.setCursor(12, 2); lcd.print(horaInicio);
+    // ALTERAÇÃO LCD GRABRIEL
+    //lcd.setCursor(0, 2);  lcd.print(buffer);
+    //lcd.setCursor(12, 2); lcd.print(horaInicio);
     lcd.setCursor(0, 3);  lcd.print("Regando     ");
+    lcd.setCursor(0, 1);  lcd.print(buffer);
+    lcd.setCursor(12, 1); lcd.print(horaInicio);
     conversorDeHorario();
     lcd.print(resposta);
   }

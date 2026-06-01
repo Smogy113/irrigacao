@@ -9,17 +9,18 @@
 // ─── Pinos ────────────────────────────────────────────────────────────────────
 const int PIN_BOMBA       = 25;
 const int PIN_SOLENOIDE   = 26;
-const int PIN_CHIP_SELECT = 5;
+const int PIN_CHIP_SELECT = 19;
 const int PIN_LED         = 33;
 const int PIN_LED_TRAVADO = 4;
 const int PIN_LED_IRRIGANDO = 16;
 const int PIN_LED_FORCADA = 15;
 
-const int PIN_BTN_TRAVAR  = 14;
-const int PIN_BTN_MENU    = 13;
+const int PIN_BTN_TRAVAR  = 23;
+const int PIN_BTN_MENU    = 14;
+// era 13 ein de acordo com minhas analises antes das 15hs
 const int PIN_BTN_CIMA    = 32;
 const int PIN_BTN_BAIXO   = 27;
-const int PIN_BTN_LER_SD  = 12;
+const int PIN_BTN_LER_SD  = 12; 
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 enum Estado       { OCIOSO, ABRINDO_SOLENOIDE, REGANDO, ESPERANDO_SOLENOIDE };
@@ -28,7 +29,7 @@ enum Interface    { PROGRAMADA, MENU, IRRIGACAO_FORCADA };
 
 // ─── Timing ───────────────────────────────────────────────────────────────────
 const unsigned long ATRASO_SOLENOIDE        = 2000;
-const unsigned long INTERVALO_AGENDA        = 500;
+const unsigned long INTERVALO_AGENDA        = 5000;
 const unsigned long INTERVALO_ATUALIZAR_AGENDA = 500;
 const unsigned long TIMEOUT_SOLENOIDE_PREVENTIVO = 6000;
 

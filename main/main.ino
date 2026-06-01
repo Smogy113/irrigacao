@@ -3,6 +3,8 @@
 #include "agenda.h"
 #include "rega.h"
 #include "menu.h"
+#include "sdcard.h"
+
 
 void setup() {
   Serial.begin(115200);
@@ -38,11 +40,15 @@ void setup() {
     //rtc.adjust(DateTime(2026, 3, 20, 23, 58, 50)); // (Ano, Mês, Dia, Hora, Minuto, Segundo)
     //rtc.adjust(DateTime(__DATE__, "23:58:50"));
   }
+
+  SPI.begin(18, 17, 5, 19);   // SCK, MISO, MOSI, CS
   
   if (!SD.begin(PIN_CHIP_SELECT)) {
     Serial.println("Falha no SD!");
   }
   Serial.println("SD iniciado");
+  verificarRegaInterrompida();
+
 
   lcd.clear();
   agora = rtc.now();
@@ -53,4 +59,5 @@ void loop() {
   atualizarAgenda();
   gerenciarRega();
   verificarAgenda();
+  monitorarSD();
 }

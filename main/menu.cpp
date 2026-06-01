@@ -147,6 +147,7 @@ void alternarBotao() {
 
   // ── Botão de trava ────────────────────────────────────────────────────────
   if (botaoTravar.foiClicado()) {
+    Serial.println("Botão TRAVAR apertado");
     estadoBotao = !estadoBotao;
     if (estadoBotao) {
       digitalWrite(PIN_LED_TRAVADO,    HIGH);
@@ -160,6 +161,7 @@ void alternarBotao() {
 
   // ── Botão Menu ────────────────────────────────────────────────────────────
   if (botaoMenu.foiClicado()) {
+    Serial.println("Botão OK apertado");
     if (interfaceAtual == PROGRAMADA) {
       menu();
     } else if (interfaceAtual == IRRIGACAO_FORCADA) {
@@ -197,12 +199,14 @@ void alternarBotao() {
 
   // ── Botão Ler SD ──────────────────────────────────────────────────────────
   if (botaoLerSd.foiClicado() && interfaceAtual == PROGRAMADA) {
+    Serial.println("Botão SD apertado");
     estadoDeLeitura = !estadoDeLeitura;
     Serial.print("Leitura SD forçada: "); Serial.println(estadoDeLeitura);
   }
 
   // ── Navegação no menu ─────────────────────────────────────────────────────
   if (botaoCima.foiClicado()) {
+    Serial.println("Botão ^ apertado");
     if (menuSelecionado > 0 && !voltarParaProgramada) {
       menuSelecionado--;
     }
@@ -210,5 +214,10 @@ void alternarBotao() {
       menuSelecionado--;
     }
   }
-  if (botaoBaixo.foiClicado() && menuSelecionado < 3) menuSelecionado++;
+  if (botaoBaixo.foiClicado()) {
+    Serial.println("Botão v apertado");
+    if (menuSelecionado < 3) {
+      menuSelecionado++;
+    }
+  }
 }
