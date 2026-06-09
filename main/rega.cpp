@@ -3,6 +3,8 @@
 #include "sdcard.h"
 #include "menu.h"
 
+static unsigned long ultimoSalvamento = 0;
+
 void executarRega(int segundos) {
   if (estadoAtual != OCIOSO) return;
 
@@ -56,6 +58,7 @@ void gerenciarRega() {
     Serial.println("BOMBA DESLIGADA");
     digitalWrite(PIN_LED_IRRIGANDO, LOW);
     strcpy(ultimoBuffer, "1900/01/01");
+    finalizarRegaAtiva();
     registrarLogRegaConcluida();
     tempoInicio = agora_ms;
     estadoBomba = DESLIGADO;
@@ -77,15 +80,21 @@ void gerenciarRega() {
         tempoInicio  = agora_ms;
         inicioDaRega = rtc.now();
         estadoAtual  = REGANDO;
+        salvarRegaAtiva(); 
       }
       break;
 
     case REGANDO:
+    if (agora_ms - ultimoSalvamento >= 10000) {
+      ultimoSalvamento = agora_ms;
+      salvarRegaAtiva();
+    }
       if (agora_ms - tempoInicio >= duracaoRega || estadoBotao) {
         digitalWrite(PIN_BOMBA, LOW);
         Serial.println("BOMBA DESLIGADA");
         digitalWrite(PIN_LED_IRRIGANDO, LOW);
         strcpy(ultimoBuffer, "1900/01/01");
+        finalizarRegaAtiva();
         registrarLogRegaConcluida();
         
         if (interfaceAtual == IRRIGACAO_FORCADA) {

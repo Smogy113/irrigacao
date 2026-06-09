@@ -58,7 +58,7 @@ void gerenciarMenu() {
   if (interfaceAtual != MENU) return;
 
   desenharCursor();
- 
+  
   if (!botaoMenu.foiClicado()) return;
 
   // ── Processar seleção ─────────────────────────────────────────────────────
@@ -86,8 +86,16 @@ void gerenciarMenu() {
   }
 
   if (!duracaoJaSelecionada) {
-    if (menuSelecionado == 1) { duracaoRegaForcado += 15; exibirDuracaoPrincipal(); }
-    if (menuSelecionado == 3 && duracaoRegaForcado > 15) { duracaoRegaForcado -= 15; exibirDuracaoPrincipal(); }
+    if (menuSelecionado == 1) { 
+      duracaoRegaForcado += 15; 
+      exibirDuracaoPrincipal(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
+    if (menuSelecionado == 3 && duracaoRegaForcado > 15) { 
+      duracaoRegaForcado -= 15; 
+      exibirDuracaoPrincipal(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
 
     if (menuSelecionado == 2) {
       // Avançar para ajuste de intervalo
@@ -101,8 +109,16 @@ void gerenciarMenu() {
     }
   } else {
     // Fase 2 – ajuste de intervalo
-    if (menuSelecionado == 1) { horaRegaForcado += 1; exibirIntervalo(); }
-    if (menuSelecionado == 3 && horaRegaForcado > 0) { horaRegaForcado -= 1; exibirIntervalo(); }
+    if (menuSelecionado == 1) { 
+      horaRegaForcado += 1; 
+      exibirIntervalo(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
+    if (menuSelecionado == 3 && horaRegaForcado > 0) { 
+      horaRegaForcado -= 1; 
+      exibirIntervalo(); 
+      salvarConfiguracoesForcidas(); // Salva na Flash
+    }
 
     if (menuSelecionado == 2) {
       // Confirmar e ativar irrigação forçada
@@ -128,7 +144,6 @@ void gerenciarMenu() {
       snprintf(duracaoStr, sizeof(duracaoStr), "%d", duracaoEmSegundos);
       //snprintf(duracaoStr, sizeof(duracaoStr), "%d", 5);
 
-
       if (horaRegaForcado != 0) {
         agora = rtc.now();
         regaForcadaAtiva         = true;
@@ -147,6 +162,7 @@ void alternarBotao() {
 
   // ── Botão de trava ────────────────────────────────────────────────────────
   if (botaoTravar.foiClicado()) {
+    Serial.println("Botão TRAVAR apertado");
     estadoBotao = !estadoBotao;
     if (estadoBotao) {
       digitalWrite(PIN_LED_TRAVADO,    HIGH);
@@ -160,6 +176,7 @@ void alternarBotao() {
 
   // ── Botão Menu ────────────────────────────────────────────────────────────
   if (botaoMenu.foiClicado()) {
+    Serial.println("Botão OK apertado");
     if (interfaceAtual == PROGRAMADA) {
       menu();
     } else if (interfaceAtual == IRRIGACAO_FORCADA) {
@@ -197,12 +214,14 @@ void alternarBotao() {
 
   // ── Botão Ler SD ──────────────────────────────────────────────────────────
   if (botaoLerSd.foiClicado() && interfaceAtual == PROGRAMADA) {
+    Serial.println("Botão SD apertado");
     estadoDeLeitura = !estadoDeLeitura;
     Serial.print("Leitura SD forçada: "); Serial.println(estadoDeLeitura);
   }
 
   // ── Navegação no menu ─────────────────────────────────────────────────────
   if (botaoCima.foiClicado()) {
+    Serial.println("Botão ^ apertado");
     if (menuSelecionado > 0 && !voltarParaProgramada) {
       menuSelecionado--;
     }
@@ -210,5 +229,10 @@ void alternarBotao() {
       menuSelecionado--;
     }
   }
-  if (botaoBaixo.foiClicado() && menuSelecionado < 3) menuSelecionado++;
+  if (botaoBaixo.foiClicado()) {
+    Serial.println("Botão v apertado");
+    if (menuSelecionado < 3) {
+      menuSelecionado++;
+    }
+  }
 }

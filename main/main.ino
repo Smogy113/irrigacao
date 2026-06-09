@@ -3,9 +3,25 @@
 #include "agenda.h"
 #include "rega.h"
 #include "menu.h"
+#include "sdcard.h"
+#include <esp_task_wdt.h>
+
+// Tempo em segundos para o WDT estourar e reiniciar o ESP32
+#define WDT_TIMEOUT 15
 
 void setup() {
   Serial.begin(115200);
+
+  carregarConfiguracoesForcidas();
+
+  // Inicializa o WDT com o timeout definido e habilita o panic (reboot automático)
+  esp_task_wdt_config_t wdt_config = {
+    .timeout_ms = WDT_TIMEOUT * 1000, // A versão nova exige o tempo em milissegundos
+    .idle_core_mask = (1 << portNUM_PROCESSORS) - 1, // Monitora os núcleos ativos
+    .trigger_panic = true             // Habilita o reboot automático (panic)
+  };
+  esp_task_wdt_init(&wdt_config); 
+  esp_task_wdt_add(NULL); // Adiciona a thread atual (loop principal) ao WDT
 
   pinMode(PIN_BOMBA,         OUTPUT); digitalWrite(PIN_BOMBA,         LOW);
   pinMode(PIN_SOLENOIDE,     OUTPUT); digitalWrite(PIN_SOLENOIDE,     LOW);
@@ -27,8 +43,8 @@ void setup() {
   lcd.print("INICIANDO...");
 
   if (!rtc.begin()) {
-    Serial.println("Erro ao iniciar o RTC");
-    while (1);
+    Serial.println("Erro: RTC nao encontrado! Reiniciando em instantes...");
+    delay(WDT_TIMEOUT * 1000 + 1000); // Espera o WDT resetar a placa
   }
   Serial.println("RTC iniciado");
   
@@ -38,19 +54,27 @@ void setup() {
     //rtc.adjust(DateTime(2026, 3, 20, 23, 58, 50)); // (Ano, Mês, Dia, Hora, Minuto, Segundo)
     //rtc.adjust(DateTime(__DATE__, "23:58:50"));
   }
+
+  SPI.begin(18, 17, 5, 19);   // SCK, MISO, MOSI, CS
   
   if (!SD.begin(PIN_CHIP_SELECT)) {
     Serial.println("Falha no SD!");
   }
   Serial.println("SD iniciado");
+  verificarRegaInterrompida();
+
 
   lcd.clear();
   agora = rtc.now();
 }
 
 void loop() {
+  // Alimenta o cão de guarda no início ou fim do loop
+  esp_task_wdt_reset();
+
   formatarLcd();
   atualizarAgenda();
   gerenciarRega();
   verificarAgenda();
+  monitorarSD();
 }

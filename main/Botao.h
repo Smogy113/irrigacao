@@ -10,7 +10,7 @@ private:
   int      estadoValidado;
 
 public:
-  Botao(uint8_t pinoEscolhido, uint32_t tempoFiltro = 20)
+  Botao(uint8_t pinoEscolhido, uint32_t tempoFiltro = 5)
     : pino(pinoEscolhido), tempoDebounce(tempoFiltro),
       ultimoTempo(0), estadoAnterior(HIGH), estadoValidado(HIGH) {}
 
