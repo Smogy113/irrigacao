@@ -5,6 +5,7 @@
 #include <esp_now.h>
 #include "defSensors.h"
 #include "checkPins.h"
+#include "dadosAleatorios.h"
 
 
 void readMacAddress() {
@@ -38,26 +39,32 @@ const int DiSensor4 = 25;
 uint8_t broadcastAddress[] = {0x8C, 0x4F, 0x00, 0x28, 0xEA, 0xB4}; // Endereço MAC de broadcast (todos os dispositivos)
 
 // Criação do pacote de dados (Atualmente com 22 Bytes no total)
-typedef struct __attribute__((packed)) {
-  // Header do pacote (4 Bytes)
-  uint8_t espId;
-  uint8_t messageType;
-  uint8_t messageNum;
-  uint8_t emergency;
+typedef union {
+    //Permite acesso aos dados de maneira manual e por meio de loops
+    struct __attribute__((packed)) {
 
-  // Payload do pacote (16 Bytes)
-  uint16_t fas1Data; // Sensores Analógicos - Decimais
-  uint16_t fas2Data;
-  uint16_t ias1Data; // Sensores Analógicos - Inteiros
-  uint16_t ias2Data;
-  
-  uint16_t fds1Data; // Sensores Digitais - Decimais
-  uint16_t fds2Data;
-  uint16_t ids1Data; // Sensores Digitais - Inteiros
-  uint16_t ids2Data;
+        //Header (4 Bytes)
+        struct __attribute__((packed)) {
+            uint8_t espId;
+            uint8_t messageType;
+            uint8_t messageNum;
+            uint8_t emergency;
+        } header;
 
-  // Tail do pacote (2 Bytes)
-  uint16_t gabarito;
+        //Payload (16 bytes) organizado em arrays
+        struct __attribute__((packed)) {
+            uint16_t fasData[2]; // Sensores Analógicos - Decimais (Antigos fas1 e fas2)
+            uint16_t iasData[2]; // Sensores Analógicos - Inteiros (Antigos ias1 e ias2)
+            uint16_t fdsData[2]; // Sensores Digitais - Decimais   (Antigos fds1 e fds2)
+            uint16_t idsData[2]; // Sensores Digitais - Inteiros   (Antigos ids1 e ids2)
+        } payload;
+
+        //Tail (2 Bytes)
+        uint16_t gabarito;
+    } packet;
+
+    uint8_t rawBytes[22]; // Permite acesso aos dados como um array de bytes para inspeção e envio
+
 } dataPacket;
 
 dataPacket sendPacked;
@@ -73,29 +80,6 @@ void printHexElegante(uint8_t *dados, size_t tamanho) {
   Serial.println("\n-----------------------------------");
 }
 
-// --- FUNÇÃO 2: LEITURA HUMANIZADA (CONVERSÃO) ---
-void printPacoteHumanizado(dataPacket *pacote) {
-  Serial.println("\n=================================");
-  Serial.println("       DADOS DO PACOTE ESP32     ");
-  Serial.println("=================================");
-  Serial.printf("ID do ESP:   %d\n", pacote->espId);
-  Serial.printf("Tipo Msg:    %d\n", pacote->messageType);
-  Serial.printf("Num Msg:     %d\n", pacote->messageNum);
-  Serial.printf("Emergência:  %s\n", pacote->emergency ? "SIM" : "NÃO");
-  Serial.println("---------------------------------");
-  Serial.println("Leituras dos Sensores:");
-  Serial.printf(" - Analógico 1 (Decimal): %d\n", pacote->fas1Data);
-  Serial.printf(" - Analógico 2 (Decimal): %d\n", pacote->fas2Data);
-  Serial.printf(" - Analógico 1 (Inteiro): %d\n", pacote->ias1Data);
-  Serial.printf(" - Analógico 2 (Inteiro): %d\n", pacote->ias2Data);
-  Serial.printf(" - Digital 1   (Decimal): %d\n", pacote->ids1Data); // Mostra o tamanho total
-  Serial.printf(" - Digital 2   (Decimal): %d\n", pacote->ids2Data); // Mostra o tamanho total
-  Serial.printf(" - Digital 1   (Inteiro): %d\n", pacote->fds1Data); // Mostra o valor real (0 ou 1)
-  Serial.printf(" - Digital 2   (Inteiro): %d\n", pacote->fds2Data); // Mostra o valor real (0 ou 1)
-  Serial.println("---------------------------------");
-  Serial.printf("Gabarito/Tail: 0x%04X\n", pacote->gabarito);
-  Serial.println("=================================\n");
-}
 
 
 void setup() {
@@ -104,34 +88,15 @@ void setup() {
   // Zera a memória do pacote ao ligar o ESP32
   memset(&sendPacked, 0, sizeof(dataPacket));
 
-
-  // Preenchimento de teste
-  sendPacked.espId = 1;
-  sendPacked.messageType = 1;
-  sendPacked.messageNum = 0;
-  sendPacked.emergency = 0;
-
-  sendPacked.fas1Data = 1;
-  sendPacked.fas2Data = 2;
-  sendPacked.ias1Data = 3;
-  sendPacked.ias2Data = 4;
-  sendPacked.fds1Data = 5;
-  sendPacked.fds2Data = 6;
-  sendPacked.ids1Data = 7;
-  sendPacked.ids2Data = 8;
-  
-  sendPacked.gabarito = 0b0000000000000000; // Gabarito de teste (2 Bytes)
-
+  sendPacked.packet.gabarito = 0b0000000000000000; // Gabarito de teste (2 Bytes)
 
   uint8_t *buffer_bytes = (uint8_t*)&sendPacked;
 
   delay(1000);
 
-  // Modo 2: Ver os dados como o usuário veria
-  printPacoteHumanizado(&sendPacked);
-
   WiFi.begin();
   WiFi.mode(WIFI_STA);
+  esp_wifi_set_channel(11, WIFI_SECOND_CHAN_NONE);
 
   if (esp_now_init() != ESP_OK) { // Inicializa o ESP-NOW
     Serial.println("Erro ao inicializar ESP-NOW");
@@ -161,7 +126,18 @@ void loop() {
   defAndCheckPins();
   
   //Definindo o pacote de dados a ser enviado (preenchido com valores de teste)
-  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *)&sendPacked, sizeof(sendPacked)); // Envia o pacote de dados para o endereço de broadcast
+  esp_err_t result = esp_now_send(broadcastAddress, sendPacked.rawBytes, sizeof(sendPacked)); // Envia o pacote de dados para o endereço de broadcast
+
+  sendPacked.packet.header.messageNum++; // Incrementa o número da mensagem para cada envio (simulando mensagens sequenciais)
+
+  sendPacked.packet.payload.fasData[0] = forceData();
+  sendPacked.packet.payload.fasData[1] = forceData();
+  sendPacked.packet.payload.iasData[0] = forceData();
+  sendPacked.packet.payload.iasData[1] = forceData();
+  sendPacked.packet.payload.fdsData[0] = forceData();
+  sendPacked.packet.payload.fdsData[1] = forceData();
+  sendPacked.packet.payload.idsData[0] = forceData();
+  sendPacked.packet.payload.idsData[1] = forceData();
 
   if (result == ESP_OK) {
     Serial.println("Pacote de dados enviado com sucesso");
@@ -169,9 +145,9 @@ void loop() {
     Serial.println("Erro ao enviar pacote de dados");
   }
 
-  sendPacked.messageNum += 1;
+  Serial.println(WiFi.channel());
 
-  delay(2000);
+  delay(10000);
 
   // Modo 1: Ver os bytes bonitinhos
   //printHexElegante(buffer_bytes, sizeof(dataPacket));
