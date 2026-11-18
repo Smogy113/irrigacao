@@ -16,19 +16,21 @@
 peca = "montagem"; // [montagem, suporte, acoplamento, eixo, luva_eixo, tubo, luva_tubo, rotor, voluta, tampa]
 
 /* [Motor (medir com paquímetro!)] */
-motor_d          = 20.2; // diâmetro do corpo
-motor_chato      = 15.1; // distância entre os lados chatos (igual a motor_d se for redondo)
-motor_comp       = 25;   // comprimento do corpo (sem eixo)
-motor_ressalto_d = 6.2;  // diâmetro do ressalto/mancal na frente do motor
-motor_eixo_d     = 2.0;  // diâmetro do eixo do motor
-motor_eixo_comp  = 8;    // quanto o eixo sai para fora do corpo
+motor_d          = 27.39; // diâmetro do corpo
+motor_chato      = 27.39; // distância entre os lados chatos (igual a motor_d se for redondo)
+motor_comp       = 32.64; // comprimento do corpo (sem eixo e sem ressalto)
+motor_ressalto_d = 9.71;  // diâmetro do ressalto ("base do eixo") na frente do motor
+motor_ressalto_h = 2.64;  // altura do ressalto
+motor_eixo_d     = 2.18;  // diâmetro do eixo do motor
+motor_eixo_comp  = 13.30; // quanto o eixo sai para fora (medido a partir do ressalto)
 
 /* [Recipiente] */
 borda_max    = 12;  // espessura MÁXIMA de parede que a garra aceita (o parafuso aperta paredes mais finas)
 profundidade = 200; // da parte de cima da borda até o fundo da bomba
 
 /* [Mangueira] */
-mangueira_di = 4;   // diâmetro INTERNO da mangueira
+mangueira_de = 3.85; // diâmetro EXTERNO do tubinho de saída (entra num furo e é colado)
+mangueira_di = 3.20; // diâmetro INTERNO do tubinho
 
 /* [Impressão] */
 folga        = 0.3; // folga para encaixes
@@ -63,8 +65,10 @@ placa_h = 6; perna_e = 8;
 cx = max(enc_de/2, corpo_r + 3);  // centro do eixo: longe o bastante para a bomba não bater na parede
 luva_r = max(motor_d, motor_chato)/2 + folga + 2.5;
 acop_d = 13; acop_hex_prof = 10; acop_sep = 2;
+acop_furo_h = motor_eixo_comp + 1;           // furo do eixo do motor (sobra 1 mm no fundo)
+acop_h = acop_hex_prof + acop_sep + acop_furo_h;
 z_acop = placa_h + 2;
-z_face = z_acop + acop_hex_prof + acop_sep + motor_eixo_comp; // face do motor
+z_face = z_acop + acop_h + 1 + motor_ressalto_h; // face do corpo do motor (1 mm de folga sob o ressalto)
 luva_motor_h = motor_comp * 0.8;
 
 // --- comprimentos ---
@@ -119,7 +123,7 @@ module suporte() {
         // janelas para alcançar o parafuso do acoplamento
         translate([cx - 30, -6, placa_h + 1]) cube([60, 12, z_face - placa_h - 5]);
         // furo do ressalto do motor
-        translate([cx, 0, z_face - 4]) cylinder(d = motor_ressalto_d + 0.8, h = 5);
+        translate([cx, 0, z_face - 4]) cylinder(d = motor_ressalto_d + 0.8, h = 5); // ressalto passa pela placa
         // berço do motor
         translate([cx, 0, z_face]) linear_extrude(luva_motor_h + 1) perfil_motor(folga);
         // fenda + furos M3 da braçadeira
@@ -136,9 +140,8 @@ module suporte() {
 
 // ---------- ACOPLAMENTO: eixo do motor <-> eixo sextavado ----------
 module acoplamento() {
-    furo_h = motor_eixo_comp - 1;
-    h = acop_hex_prof + acop_sep + furo_h;
-    zs = acop_hex_prof + acop_sep + furo_h/2;
+    h = acop_h;
+    zs = h - 4.5;  // parafuso perto do topo: pega no eixo do motor mesmo se ele for mais curto
     difference() {
         cylinder(d = acop_d, h = h);
         translate([0, 0, -1]) hex(eixo_ef + folga, acop_hex_prof + 1);
@@ -199,19 +202,16 @@ module perfil_voluta() union() {
     translate([r0, -1]) square([voluta_larg, corpo_r - 1]);
 }
 furos_ang = [120, 240, 330];
-barb_d = mangueira_di + 1.0;
-bico_furo = max(mangueira_di - 1.6, 2);
+bico_furo = max(min(mangueira_di, 3), 2);  // canal que leva a água até o tubinho
+bico_de = mangueira_de + 4;               // bico externo (parede de 2 mm)
+bico_comp = 10; bico_prof = 8;            // o tubinho entra 8 mm
 zc_bico = voluta_h / 2;
-
-module farpa() {
-    for (i = [0 : 1]) translate([0, 0, i * 5]) cylinder(d1 = barb_d, d2 = mangueira_di - 0.3, h = 5);
-}
 
 module voluta() {
     difference() {
         union() {
             linear_extrude(voluta_h) contorno_bomba();
-            translate([xc_saida, corpo_r + 5.5, zc_bico]) rotate([-90, 0, 0]) farpa();
+            translate([xc_saida, corpo_r + 5.5, zc_bico]) rotate([-90, 0, 0]) cylinder(d = bico_de, h = bico_comp);
         }
         translate([0, 0, piso]) linear_extrude(camara_h + 1) perfil_voluta();
         // transição do canal retangular para o furo redondo do bico
@@ -220,6 +220,9 @@ module voluta() {
             translate([xc_saida, corpo_r + 5, zc_bico]) rotate([-90, 0, 0]) cylinder(d = bico_furo, h = 1);
         }
         translate([xc_saida, corpo_r, zc_bico]) rotate([-90, 0, 0]) cylinder(d = bico_furo, h = 30, $fn = 24);
+        // furo onde o tubinho entra (encaixe justo + cola)
+        translate([xc_saida, corpo_r + 5.5 + bico_comp - bico_prof, zc_bico]) rotate([-90, 0, 0])
+            cylinder(d = mangueira_de + 0.15, h = bico_prof + 1, $fn = 32);
         // parafusos M3 de baixo para cima, porca embutida em baixo
         for (a = furos_ang) rotate(a) translate([furo_r, 0, 0]) {
             translate([0, 0, -1]) cylinder(d = 3.4, h = 50, $fn = 24);
@@ -254,8 +257,8 @@ module tampa() {
 module motor_fantasma()
     color("silver") translate([cx, 0, z_face]) {
         linear_extrude(motor_comp) perfil_motor();
-        translate([0, 0, -1.6]) cylinder(d = motor_ressalto_d, h = 1.6);
-        translate([0, 0, -motor_eixo_comp]) cylinder(d = motor_eixo_d, h = motor_eixo_comp);
+        translate([0, 0, -motor_ressalto_h]) cylinder(d = motor_ressalto_d, h = motor_ressalto_h);
+        translate([0, 0, -motor_ressalto_h - motor_eixo_comp]) cylinder(d = motor_eixo_d, h = motor_eixo_comp);
     }
 
 module parede_fantasma()

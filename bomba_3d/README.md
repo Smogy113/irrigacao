@@ -14,16 +14,16 @@ Tudo fica em `bomba.scad`, na seção **PARÂMETROS**. Abra no OpenSCAD, que é 
 
 | Parâmetro | Padrão | O que é |
 |---|---|---|
-| `motor_d` / `motor_chato` | 20.2 / 15.1 | Diâmetro do corpo e distância entre os lados chatos. Para motor redondo, use o mesmo valor nos dois. |
-| `motor_comp` | 25 | Comprimento do corpo |
-| `motor_ressalto_d` | 6.2 | Ressalto do mancal na frente do motor |
-| `motor_eixo_d` / `motor_eixo_comp` | 2.0 / 8 | Diâmetro e comprimento do eixo do motor |
+| `motor_d` / `motor_chato` | 27.39 / 27.39 | Diâmetro do corpo e distância entre os lados chatos. Motor redondo: mesmo valor nos dois. |
+| `motor_comp` | 32.64 | Comprimento do corpo (sem eixo e sem ressalto) |
+| `motor_ressalto_d` / `motor_ressalto_h` | 9.71 / 2.64 | Ressalto ("base do eixo") na frente do motor |
+| `motor_eixo_d` / `motor_eixo_comp` | 2.18 / 13.30 | Diâmetro e comprimento do eixo do motor |
 | `borda_max` | 12 | Espessura máxima de parede que a garra aceita |
 | `profundidade` | 200 | Distância do topo da borda até o fundo da bomba |
-| `mangueira_di` | 4 | Diâmetro interno da mangueira |
+| `mangueira_de` / `mangueira_di` | 3.85 / 3.20 | Diâmetro externo e interno do tubinho de saída |
 | `altura_max` | 200 | Peças mais longas que isso (eixo e tubo) são divididas automaticamente |
 
-> ⚠️ Os valores padrão do motor são de um **motor tipo 130**. **Meça o seu motor** e corrija antes de imprimir o `suporte` e o `acoplamento`.
+> Os valores padrão já são do motor de 12 V e 7000 rpm medido no laboratório (corpo redondo de 27,4 mm).
 
 Para exportar pela linha de comando:
 ```
@@ -66,7 +66,7 @@ No console, o OpenSCAD mostra quantos pedaços de eixo e de tubo imprimir.
 6. Cole o **rotor** na ponta do eixo, com as pás viradas para cima.
 7. Coloque as porcas M3 nos encaixes embaixo da **voluta** e feche com os 3 parafusos.
 8. Prenda a garra na borda. A perna de dentro encosta na parede, e o parafuso M4 de fora aperta.
-9. Ligue a mangueira no bico.
+9. Enfie o **tubinho** no furo do bico (entra 8 mm) e cole com epóxi ou superbonder.
 
 ## Dicas
 
