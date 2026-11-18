@@ -77,6 +77,8 @@ Para usar outro tamanho, mude `paraf_furo`, `porca_ef` e `porca_h` no `bomba.sca
 
 ## Montagem
 
+![vista explodida](img/vista_explodida.png)
+
 1. Encaixe a porca M4 na fenda lateral do **acoplamento**. Coloque o acoplamento no eixo do motor e aperte o parafuso.
 2. Coloque o motor no **berço do suporte**, com o eixo para baixo, e aperte os 2 parafusos M4 da braçadeira.
 3. Una os pedaços do **eixo** com a **luva_eixo**, usando cola.
