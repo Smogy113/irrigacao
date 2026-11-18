@@ -62,22 +62,28 @@ Só o eixo e as peças que transmitem o giro precisam de 100%. No resto, preench
 
 ## Ferragens
 
-- 1× parafuso **M4 × 20 a 25** + porca: aperta a garra na parede
-- 2× **M3 × 12** + porcas: braçadeira do motor
-- 1× **M3 × 8** + porca: prende o eixo do motor no acoplamento
-- 3× **M3 × 14 a 16** + porcas: fecham a bomba (voluta + tampa)
-- 2× parafusos autoatarraxantes de **3 mm** (opcional): travam o tubo no suporte e na tampa. Cola também resolve.
+Todos os parafusos são **M4**, com porcas M4:
+
+| Qtd | Parafuso | Para quê |
+|---|---|---|
+| 1 | **M4 × 20 a 25** + porca | Apertar a garra na parede |
+| 2 | **M4 × 12 a 16** + porcas | Braçadeira do motor |
+| 1 | **M4 × 8 a 10** + porca | Prender o eixo do motor no acoplamento |
+| 3 | **M4 × 16 a 20** + porcas | Fechar a bomba (voluta + tampa) |
+| 2 | **M4 × 8** (opcional, sem porca) | Rosqueados direto no plástico, travam o tubo no suporte e na tampa. Cola também resolve. |
+
+Para usar outro tamanho, mude `paraf_furo`, `porca_ef` e `porca_h` no `bomba.scad`.
 - Cola **epóxi** ou **superbonder**: rotor no eixo, emenda do eixo e acoplamento no eixo sextavado
 
 ## Montagem
 
-1. Encaixe a porca M3 na fenda lateral do **acoplamento**. Coloque o acoplamento no eixo do motor e aperte o parafuso.
-2. Coloque o motor no **berço do suporte**, com o eixo para baixo, e aperte os 2 parafusos M3 da braçadeira.
+1. Encaixe a porca M4 na fenda lateral do **acoplamento**. Coloque o acoplamento no eixo do motor e aperte o parafuso.
+2. Coloque o motor no **berço do suporte**, com o eixo para baixo, e aperte os 2 parafusos M4 da braçadeira.
 3. Una os pedaços do **eixo** com a **luva_eixo**, usando cola.
 4. Encaixe o **tubo** no suporte por baixo. Passe o eixo por dentro do tubo e pelo furo da placa até ele entrar no sextavado do acoplamento. Cole o eixo no acoplamento.
 5. Passe a ponta de baixo do eixo pela **tampa**: primeiro pelo encaixe do tubo, depois pelo mancal e pelo furo de entrada. Encaixe o tubo na tampa.
 6. Cole o **rotor** na ponta do eixo, com as pás viradas para cima.
-7. Coloque as porcas M3 nos encaixes embaixo da **voluta** e feche com os 3 parafusos.
+7. Coloque as porcas M4 nos encaixes embaixo da **voluta** e feche com os 3 parafusos.
 8. Prenda a garra na borda. A perna de dentro encosta na parede, e o parafuso M4 de fora aperta.
 9. Enfie o **tubinho** no furo do bico (entra 8 mm) e cole com epóxi ou superbonder.
 
