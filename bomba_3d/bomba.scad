@@ -135,7 +135,7 @@ module suporte() {
         translate([cx, 0, z_face - 4]) cylinder(d = motor_ressalto_d + 0.8, h = 5); // ressalto passa pela placa
         // berço do motor
         translate([cx, 0, z_face]) linear_extrude(luva_motor_h + 1) perfil_motor(folga);
-        // fenda + furos M3 da braçadeira
+        // fenda + furos M4 da braçadeira
         translate([cx - 0.75, 0, z_face]) cube([1.5, luva_r + 10, luva_motor_h + 1]);
         for (z = [z_face + luva_motor_h*0.3, z_face + luva_motor_h*0.75])
             translate([cx - 10, luva_r + 3, z]) rotate([0, 90, 0]) cylinder(d = paraf_furo, h = 20);
@@ -155,7 +155,7 @@ module acoplamento() {
         cylinder(d = acop_d, h = h);
         translate([0, 0, -1]) hex(eixo_ef + folga, acop_hex_prof + 1);
         translate([0, 0, acop_hex_prof + acop_sep]) cylinder(d = motor_eixo_d + 0.1, h = h, $fn = 24);
-        // parafuso M3 (sem cabeça ou comum) + porca
+        // parafuso M4 + porca
         translate([0, 0, zs]) rotate([0, 90, 0]) cylinder(d = paraf_furo, h = acop_d);
         // fenda da porca, aberta para o lado
         translate([2.0, -(porca_ef + folga)/2, zs - (porca_ef + folga)/2]) cube([porca_h + 0.4, 20, porca_ef + folga]);
@@ -240,7 +240,7 @@ module voluta() {
         // furo onde o tubinho entra (encaixe justo + cola)
         translate([xc_saida, corpo_r + 5.5 + bico_comp - bico_prof, zc_bico]) rotate([-90, 0, 0])
             cylinder(d = mangueira_de + 0.15, h = bico_prof + 1, $fn = 32);
-        // parafusos M3 de baixo para cima, porca embutida em baixo
+        // parafusos M4 de baixo para cima, porca embutida em baixo
         for (a = furos_ang) rotate(a) translate([furo_pos(a), 0, 0]) {
             translate([0, 0, -1]) cylinder(d = paraf_furo, h = 50, $fn = 24);
             translate([0, 0, -1]) hex(porca_ef + folga, porca_h + 0.3 + 1);
