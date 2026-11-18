@@ -45,14 +45,27 @@ No console, o OpenSCAD mostra quantos pedaços de eixo e de tubo imprimir.
 | `voluta` | 1 | Com o piso para baixo |
 | `tampa` | 1 | Com a tampa para baixo |
 
-**Material:** PETG, que aguenta bem a água. PLA serve para testar. Use 4 perímetros nas peças da bomba e no eixo.
+**Material:** PETG, que aguenta bem a água. PLA serve para testar.
+
+### Configuração do fatiador (para imprimir rápido)
+
+As paredes já foram desenhadas finas, com 1,6 a 2 mm. Com bico de 0,4 mm, **4 perímetros** deixam essas paredes maciças, e o preenchimento quase não entra.
+
+| Peça | Perímetros | Preenchimento | Camada |
+|---|---|---|---|
+| `eixo`, `luva_eixo`, `acoplamento`, `rotor` | 4 | **100%** | 0,2 mm |
+| `voluta`, `tampa` | 4 | 15% | 0,2 mm |
+| `suporte` | 3 | 15% gyroid | 0,28 mm |
+| `tubo` | 4 | não usa (a parede já fica maciça) | 0,28 mm |
+
+Só o eixo e as peças que transmitem o giro precisam de 100%. No resto, preencher mais só aumenta o tempo.
 
 ## Ferragens
 
-- 1× parafuso **M4 × 20** + porca: aperta a garra na parede
-- 2× **M3 × 25** + porcas: braçadeira do motor
+- 1× parafuso **M4 × 20 a 25** + porca: aperta a garra na parede
+- 2× **M3 × 12** + porcas: braçadeira do motor
 - 1× **M3 × 8** + porca: prende o eixo do motor no acoplamento
-- 3× **M3 × 12 a 14** + porcas: fecham a bomba (voluta + tampa)
+- 3× **M3 × 14 a 16** + porcas: fecham a bomba (voluta + tampa)
 - 2× parafusos autoatarraxantes de **3 mm** (opcional): travam o tubo no suporte e na tampa. Cola também resolve.
 - Cola **epóxi** ou **superbonder**: rotor no eixo, emenda do eixo e acoplamento no eixo sextavado
 
@@ -72,5 +85,5 @@ No console, o OpenSCAD mostra quantos pedaços de eixo e de tubo imprimir.
 
 - **Sentido de giro:** o rotor tem pás retas, então a bomba funciona nos dois sentidos. Rende mais quando o rotor gira no **sentido anti-horário visto de cima**. Se sair pouca água, inverta os fios do motor.
 - **A bomba tem que estar submersa.** Bomba centrífuga não "puxa" água do seco.
-- Furos pequenos impressos saem apertados. Se o eixo do motor (2 mm) não entrar no acoplamento, passe uma broca de 2 mm.
+- Furos pequenos impressos saem apertados. Se o eixo do motor (2 mm) não entrar no acoplamento, passe uma broca de 2,2 mm.
 - O eixo precisa girar livre nos mancais. Se agarrar, passe uma lixa fina no eixo ou aumente `bucha_d` no código.

@@ -42,34 +42,38 @@ eixo_ef   = 7;                    // eixo sextavado: medida entre faces
 eixo_circ = eixo_ef / cos(30);    // diâmetro entre cantos
 bucha_d   = eixo_circ + 0.7;      // furo-mancal por onde o eixo gira
 
-tubo_de = 20;  tubo_di = 14.4;    // tubo-guia (coluna)
+tubo_de = 17.2; tubo_di = 14.0;   // tubo-guia (coluna), parede de 1,6 mm
 enc_di  = tubo_de + folga + 0.1;  // encaixe do tubo
-enc_de  = enc_di + 6;
-enc_h   = 25;                     // encaixe no suporte
+enc_de  = enc_di + 4;             // parede de 2 mm
+enc_h   = 18;                     // encaixe no suporte
 
 // --- bomba ---
 rotor_r = 15; rotor_placa = 2; rotor_pa_h = 6; rotor_pas = 6; cubo_d = 12;
-piso = 2; camara_h = rotor_placa + rotor_pa_h + 2; tampa_e = 3;
+piso = 2; camara_h = rotor_placa + rotor_pa_h + 2; tampa_e = 2.4;
+parede = 2;                       // parede da voluta
 r0 = rotor_r + 1.5; voluta_larg = 6; Rmax = r0 + voluta_larg;
-corpo_r = Rmax + 8; furo_r = Rmax + 3.5;
+corpo_r = Rmax + parede;          // raio externo (referência do bico)
+function r_espiral(a) = r0 + voluta_larg * a / 360;
+function furo_pos(a) = r_espiral(a) + parede + 2.5; // furo dos parafusos logo fora da parede
 xc_saida = r0 + voluta_larg/2;    // centro do canal de saída
-bico_larg = voluta_larg + 6;
+bico_larg = voluta_larg + 2*parede;
 voluta_h = piso + camara_h;
 olho_d = 16;                      // entrada de água (em volta do eixo)
-pernas_h = 14; enc_piso = 3; enc_prof = 15;
+pernas_h = 12; enc_piso = 2.4; enc_prof = 12;
 tampa_total = tampa_e + pernas_h + enc_piso + enc_prof;
 z_piso_bomba = voluta_h + tampa_e + pernas_h + enc_piso; // topo do mancal inferior (local)
 
 // --- suporte ---
-placa_h = 6; perna_e = 8;
-cx = max(enc_de/2, corpo_r + 3);  // centro do eixo: longe o bastante para a bomba não bater na parede
-luva_r = max(motor_d, motor_chato)/2 + folga + 2.5;
+placa_h = 4; perna_e = 6; garra_larg = 14; nervura = 3;
+cx = max(enc_de/2, Rmax + 4);     // centro do eixo: longe o bastante para a bomba não bater na parede
+berco_e = 2;                      // parede do berço do motor
+luva_r = max(motor_d, motor_chato)/2 + folga + berco_e;
 acop_d = 13; acop_hex_prof = 10; acop_sep = 2;
 acop_furo_h = motor_eixo_comp + 1;           // furo do eixo do motor (sobra 1 mm no fundo)
 acop_h = acop_hex_prof + acop_sep + acop_furo_h;
 z_acop = placa_h + 2;
 z_face = z_acop + acop_h + 1 + motor_ressalto_h; // face do corpo do motor (1 mm de folga sob o ressalto)
-luva_motor_h = motor_comp * 0.8;
+luva_motor_h = motor_comp * 0.6;
 
 // --- comprimentos ---
 tubo_comp = profundidade - z_piso_bomba;
@@ -97,31 +101,30 @@ module suporte() {
     difference() {
         union() {
             // placa que apoia na borda
-            hull() {
-                translate([xl, -10, 0]) cube([perna_e, 20, placa_h]);
-                translate([cx, 0, 0]) cylinder(r = max(luva_r, enc_de/2), h = placa_h);
-            }
+            translate([xl, -garra_larg/2, 0]) cube([cx - xl, garra_larg, placa_h]);
+            translate([cx, 0, 0]) cylinder(r = max(luva_r, enc_de/2), h = placa_h);
             // perna de fora (com parafuso de aperto)
-            translate([xl, -10, -enc_h]) cube([perna_e, 20, enc_h + placa_h]);
+            translate([xl, -garra_larg/2, -enc_h]) cube([perna_e, garra_larg, enc_h + placa_h]);
             // encaixe do tubo
             translate([cx, 0, -enc_h]) cylinder(d = enc_de, h = enc_h);
-            // perna de dentro (encosta na parede) ligada ao encaixe
-            translate([0, -10, -enc_h]) cube([cx, 20, enc_h]);
+            // perna de dentro: sapata fina que encosta na parede + nervura até o encaixe
+            translate([0, -garra_larg/2, -enc_h]) cube([3, garra_larg, enc_h]);
+            translate([0, -nervura/2, -enc_h]) cube([cx, nervura, enc_h]);
             // câmara do acoplamento
             translate([cx, 0, placa_h]) cylinder(r = luva_r, h = z_face - placa_h);
             // berço do motor
-            translate([cx, 0, z_face]) linear_extrude(luva_motor_h) perfil_motor(folga + 2.5);
+            translate([cx, 0, z_face]) linear_extrude(luva_motor_h) perfil_motor(folga + berco_e);
             // orelhas da braçadeira
-            translate([cx - 5, luva_r - 3, z_face]) cube([10, 10, luva_motor_h]);
+            translate([cx - 4.5, luva_r - 2, z_face]) cube([9, 8, luva_motor_h]);
         }
         // encaixe do tubo
         translate([cx, 0, -enc_h - 1]) cylinder(d = enc_di, h = enc_h + 1);
         // mancal superior
         translate([cx, 0, -1]) cylinder(d = bucha_d, h = placa_h + 2);
         // interior da câmara
-        translate([cx, 0, placa_h]) cylinder(r = luva_r - 2.5, h = z_face - placa_h - 3);
+        translate([cx, 0, placa_h]) cylinder(r = luva_r - berco_e, h = z_face - placa_h - 3);
         // janelas para alcançar o parafuso do acoplamento
-        translate([cx - 30, -6, placa_h + 1]) cube([60, 12, z_face - placa_h - 5]);
+        translate([cx - 30, -7, placa_h + 1]) cube([60, 14, z_face - placa_h - 5]);
         // furo do ressalto do motor
         translate([cx, 0, z_face - 4]) cylinder(d = motor_ressalto_d + 0.8, h = 5); // ressalto passa pela placa
         // berço do motor
@@ -129,7 +132,7 @@ module suporte() {
         // fenda + furos M3 da braçadeira
         translate([cx - 0.75, 0, z_face]) cube([1.5, luva_r + 10, luva_motor_h + 1]);
         for (z = [z_face + luva_motor_h*0.3, z_face + luva_motor_h*0.75])
-            translate([cx - 10, luva_r + 2.5, z]) rotate([0, 90, 0]) cylinder(d = 3.4, h = 20);
+            translate([cx - 10, luva_r + 2, z]) rotate([0, 90, 0]) cylinder(d = 3.4, h = 20);
         // parafuso M4 de aperto na parede + porca embutida
         translate([xl - 1, 0, -enc_h/2]) rotate([0, 90, 0]) cylinder(d = 4.5, h = perna_e + 2);
         translate([xl - 1, 0, -enc_h/2]) rotate([0, 90, 0]) rotate([0, 0, 30]) hex(7 + folga, 3.5 + 1);
@@ -193,12 +196,19 @@ module rotor() {
 
 // ---------- VOLUTA (corpo da bomba) ----------
 module contorno_bomba() union() {
-    circle(r = corpo_r);
+    offset(r = parede) espiral();
     translate([xc_saida - bico_larg/2, 0]) square([bico_larg, corpo_r + 6]);
+    for (a = furos_ang) hull() {
+        rotate(a) translate([furo_pos(a), 0]) circle(r = 4.8);
+        rotate(a) translate([r_espiral(a), 0]) circle(r = 4.8);
+    }
+}
+module espiral() union() {
+    circle(r = r0);
+    polygon([for (a = [0 : 4 : 360]) [r_espiral(a)*cos(a), r_espiral(a)*sin(a)]]);
 }
 module perfil_voluta() union() {
-    circle(r = r0);
-    polygon([for (a = [0 : 4 : 360]) let(r = r0 + voluta_larg * a / 360) [r*cos(a), r*sin(a)]]);
+    espiral();
     translate([r0, -1]) square([voluta_larg, corpo_r - 1]);
 }
 furos_ang = [120, 240, 330];
@@ -224,7 +234,7 @@ module voluta() {
         translate([xc_saida, corpo_r + 5.5 + bico_comp - bico_prof, zc_bico]) rotate([-90, 0, 0])
             cylinder(d = mangueira_de + 0.15, h = bico_prof + 1, $fn = 32);
         // parafusos M3 de baixo para cima, porca embutida em baixo
-        for (a = furos_ang) rotate(a) translate([furo_r, 0, 0]) {
+        for (a = furos_ang) rotate(a) translate([furo_pos(a), 0, 0]) {
             translate([0, 0, -1]) cylinder(d = 3.4, h = 50, $fn = 24);
             translate([0, 0, -1]) hex(5.5 + folga, 2.5 + 1);
         }
@@ -242,14 +252,14 @@ module tampa() {
         // olho de entrada
         translate([0, 0, -1]) cylinder(d = olho_d, h = tampa_e + 2);
         // espaço interno + janelas por onde a água entra
-        translate([0, 0, z_pernas - 0.1]) cylinder(d = enc_de - 6, h = pernas_h + 0.1);
-        for (a = [0, 120, 240]) rotate(a + 60) translate([0, -7, z_pernas]) cube([30, 14, pernas_h - 1]);
+        translate([0, 0, z_pernas - 0.1]) cylinder(d = enc_de - 4, h = pernas_h + 0.1);
+        for (a = [0, 120, 240]) rotate(a + 60) translate([0, -6, z_pernas]) cube([30, 12, pernas_h - 1]);
         // mancal inferior
         translate([0, 0, z_pisoE - 1]) cylinder(d = bucha_d, h = enc_piso + 2);
         // encaixe do tubo
         translate([0, 0, z_pisoE + enc_piso]) cylinder(d = enc_di, h = enc_prof + 1);
         translate([0, 0, z_pisoE + enc_piso + enc_prof/2]) rotate([0, 90, 0]) cylinder(d = 2.5, h = enc_de);
-        for (a = furos_ang) rotate(a) translate([furo_r, 0, -1]) cylinder(d = 3.4, h = 10, $fn = 24);
+        for (a = furos_ang) rotate(a) translate([furo_pos(a), 0, -1]) cylinder(d = 3.4, h = 10, $fn = 24);
     }
 }
 
