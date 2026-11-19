@@ -95,3 +95,36 @@ Para usar outro tamanho, mude `paraf_furo`, `porca_ef` e `porca_h` no `bomba.sca
 - **A bomba tem que estar submersa.** Bomba centrífuga não "puxa" água do seco.
 - Furos pequenos impressos saem apertados. Se o eixo do motor (2 mm) não entrar no acoplamento, passe uma broca de 2,2 mm.
 - O eixo precisa girar livre nos mancais. Se agarrar, passe uma lixa fina no eixo ou aumente `bucha_d` no código.
+
+---
+
+# Distribuidor em "T" (rega 2 vasos)
+
+![distribuidor](img/distribuidor.png)
+
+O tubinho que sai da bomba encaixa na **entrada do centro**. A água se divide para os dois lados e sai pelas **pontas dobradas para baixo**. Essas pontas entram nos vasos e seguram a barra no lugar.
+
+- **Comprimento total:** 30 cm, de ponta a ponta
+- **Tubo:** 9 mm por fora, parede de 2 mm, furo de 5 mm
+- **Entrada:** para o tubinho de 3,85 mm, que entra 10 mm
+- **Pontas:** curva de raio 10 mm e perna reta de 30 mm descendo
+
+Todas as medidas ficam no início de `distribuidor.scad`.
+
+## Peças
+
+São 3 peças, porque 30 cm não cabe na mesa da maioria das impressoras:
+
+| Peça | Qtd | Tamanho | Como imprimir |
+|---|---|---|---|
+| `distribuidor_centro` | 1 | 34 × 13 × 25 mm | Com a entrada para cima |
+| `distribuidor_braco` | **2** | 145 × 45 × 8 mm | Deitado, do jeito que está no arquivo. Não precisa de suporte. |
+
+Use 3 perímetros e 20% de preenchimento. Com parede de 2 mm, o tubo já sai praticamente maciço.
+
+## Montagem
+
+1. Encaixe os dois braços no centro, até o fim (entram 12 mm), com as pontas viradas para o mesmo lado.
+2. Confira se as pontas ficam paralelas. Depois cole com epóxi ou superbonder.
+3. Enfie o tubinho da bomba na entrada de cima e cole.
+4. Apoie a barra com cada ponta dentro de um vaso. Deixe a barra **nivelada**, para a água sair igual dos dois lados.
